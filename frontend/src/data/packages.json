@@ -1,0 +1,45 @@
+{
+  "packages": [
+    {
+      "key": "start",
+      "name": "Start",
+      "tagline": "Boshlovchi biznes uchun",
+      "price": "[NARX]",
+      "popular": false,
+      "features": ["Bir sahifali sayt yoki oddiy bot", "Telefonga moslashgan dizayn", "Aloqa formasi", "1 oy bepul qo'llab-quvvatlash"]
+    },
+    {
+      "key": "pro",
+      "name": "Pro",
+      "tagline": "O'sayotgan biznes uchun",
+      "price": "[NARX]",
+      "popular": true,
+      "features": ["Ko'p sahifali sayt yoki funksiyali bot", "Admin panel", "SEO asoslari", "Telegram bildirishnomalar", "3 oy bepul qo'llab-quvvatlash"]
+    },
+    {
+      "key": "maktab_biznes",
+      "name": "Maktab-Biznes",
+      "tagline": "Maktab va yirik tashkilotlar uchun",
+      "price": "[NARX]",
+      "popular": false,
+      "features": ["To'liq tizim (ERP / veb-ilova)", "Foydalanuvchi rollari", "Hisobotlar va statistika", "O'qitish va ishga tushirish", "6 oy bepul qo'llab-quvvatlash"]
+    }
+  ],
+  "comparison": [
+    { "label": "Telefonga moslashgan dizayn", "values": [true, true, true] },
+    { "label": "Admin panel", "values": [false, true, true] },
+    { "label": "SEO asoslari", "values": [false, true, true] },
+    { "label": "Telegram bildirishnomalar", "values": [false, true, true] },
+    { "label": "Foydalanuvchi rollari", "values": [false, false, true] },
+    { "label": "Hisobotlar va statistika", "values": [false, false, true] },
+    { "label": "O'qitish va ishga tushirish", "values": [false, false, true] },
+    { "label": "Bepul qo'llab-quvvatlash", "values": ["1 oy", "3 oy", "6 oy"] }
+  ],
+  "addons": [
+    { "name": "Qo'shimcha til (rus / ingliz)", "text": "Saytni boshqa tilga ham tarjima qilamiz.", "price": "[NARX]" },
+    { "name": "Instagram bot", "text": "Direct xabarlarga avtomatik javob.", "price": "[NARX]" },
+    { "name": "AI yordamchi", "text": "Savollarga javob beruvchi aqlli yordamchi.", "price": "[NARX]" },
+    { "name": "Hosting va domen", "text": "Yillik hosting va domen sozlash.", "price": "[NARX]" },
+    { "name": "Oylik qo'llab-quvvatlash", "text": "Yangilanish, xatolarni tuzatish va kichik o'zgarishlar.", "price": "[NARX]" }
+  ]
+}

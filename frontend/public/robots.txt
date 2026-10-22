@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /boshqaruv
+
+Sitemap: https://[DOMAIN]/sitemap.xml
