@@ -2,7 +2,7 @@
   { "scope": "home", "q": "Buyurtma berganimdan keyin nima boʻladi?", "a": "Bir ish kuni ichida siz bilan bogʻlanamiz, vazifani aniqlaymiz, muddat va narxni kelishamiz. Faqat kelishuvdan keyin ish boshlanadi." },
   { "scope": "home", "q": "Narxni qanday bilaman?", "a": "Narx loyiha hajmiga bogʻliq. Buyurtma qoldirganingizdan keyin aniq narxni oldindan aytamiz, yashirin toʻlovlar yoʻq." },
   { "scope": "home", "q": "Toʻlov qanday amalga oshiriladi?", "a": "Katta xizmatlar uchun narx kelishilgach, karta orqali oʻtkazma qilinadi. Tayyor mahsulotlar uchun keyinroq onlayn toʻlov qoʻshiladi." },
-  { "scope": "home", "q": "Maktabimizga demo koʻrsata olasizmi?", "a": "Ha. 'Demo soʻrash' formasini toʻldiring, biz tizimni sizga koʻrsatib beramiz. Bu majburiyat emas." },
+  { "scope": "home", "q": "Yechimni avval koʻrsata olasizmi?", "a": "Ha. Buyurtma yoki demo formasini toʻldiring, biz yechimni sizga koʻrsatib beramiz (maktablar uchun tayyor demo bor). Bu majburiyat emas." },
   { "scope": "home", "q": "Ishga tushgandan keyin yordam berasizmi?", "a": "Ha. Har bir paketda bepul qoʻllab-quvvatlash davri bor, undan keyin oylik xizmat mavjud." },
   { "scope": "pricing", "q": "Paketdagi narxga hamma narsa kiradimi?", "a": "Paketda koʻrsatilgan imkoniyatlar kiradi. Qoʻshimcha narsalar alohida, kelishilgan narxda qoʻshiladi." },
   { "scope": "pricing", "q": "Maktablar uchun narx nega koʻrsatilmagan?", "a": "Maktab hajmi, oʻquvchilar soni va kerakli modullar har xil. Shuning uchun demo koʻrsatib, soʻng aniq narx aytamiz." },

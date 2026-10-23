@@ -5,7 +5,7 @@ export const schoolsPage = {
   seoDescription:
     'Maktablar va oʻquv markazlari uchun boshqaruv tizimi: davomat, baholar, avtomatik dars jadvali va ota-onalar bilan aloqa. Avval demo, keyin qaror.',
   hero: {
-    badge: 'Maktablar va oʻquv markazlari uchun',
+    badge: 'Taʼlim biznesi: maktablar va oʻquv markazlari',
     title: 'Maktabingizni bitta tizimda boshqaring',
     text: 'Davomat, baholar, dars jadvali va ota-onalar bilan aloqa: qogʻoz va Excel oʻrniga bitta tushunarli tizim. Avval demo koʻrasiz, keyin qaror qilasiz.',
     cta: 'Demo soʻrash',

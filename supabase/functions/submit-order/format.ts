@@ -12,7 +12,7 @@ const SERVICE_LABELS: Record<string, string> = {
 const PACKAGE_LABELS: Record<string, string> = {
   start: 'Start',
   pro: 'Pro',
-  maktab_biznes: 'Maktab-Biznes',
+  maktab_biznes: 'Korporativ',
   custom: 'Maxsus / bilmayman',
 }
 const BUDGET_LABELS: Record<string, string> = {

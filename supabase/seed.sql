@@ -12,7 +12,7 @@ insert into public.projects (slug, title, category, summary, problem, solution, 
 insert into public.packages (key, name, tagline, price_text, popular, features, sort_order) values
   ('start', 'Start', 'Boshlovchi biznes uchun', '[NARX]', false, array['Bir sahifali sayt yoki oddiy bot', 'Telefonga moslashgan dizayn', 'Aloqa formasi', '1 oy bepul qoʻllab-quvvatlash']::text[], 0),
   ('pro', 'Pro', 'Oʻsayotgan biznes uchun', '[NARX]', true, array['Koʻp sahifali sayt yoki funksiyali bot', 'Admin panel', 'SEO asoslari', 'Telegram bildirishnomalar', '3 oy bepul qoʻllab-quvvatlash']::text[], 1),
-  ('maktab_biznes', 'Maktab-Biznes', 'Maktab va yirik tashkilotlar uchun', '[NARX]', false, array['Toʻliq tizim (ERP / veb-ilova)', 'Foydalanuvchi rollari', 'Hisobotlar va statistika', 'Oʻqitish va ishga tushirish', '6 oy bepul qoʻllab-quvvatlash']::text[], 2);
+  ('maktab_biznes', 'Korporativ', 'Yirik tashkilot va maktablar uchun', '[NARX]', false, array['Toʻliq tizim (ERP / veb-ilova)', 'Foydalanuvchi rollari', 'Hisobotlar va statistika', 'Oʻqitish va ishga tushirish', '6 oy bepul qoʻllab-quvvatlash']::text[], 2);
 
 insert into public.comparison_rows (label, "values", sort_order) values
   ('Telefonga moslashgan dizayn', '[true, true, true]'::jsonb, 0),
@@ -35,7 +35,7 @@ insert into public.faq (scope, question, answer, sort_order) values
   ('home', 'Buyurtma berganimdan keyin nima boʻladi?', 'Bir ish kuni ichida siz bilan bogʻlanamiz, vazifani aniqlaymiz, muddat va narxni kelishamiz. Faqat kelishuvdan keyin ish boshlanadi.', 0),
   ('home', 'Narxni qanday bilaman?', 'Narx loyiha hajmiga bogʻliq. Buyurtma qoldirganingizdan keyin aniq narxni oldindan aytamiz, yashirin toʻlovlar yoʻq.', 1),
   ('home', 'Toʻlov qanday amalga oshiriladi?', 'Katta xizmatlar uchun narx kelishilgach, karta orqali oʻtkazma qilinadi. Tayyor mahsulotlar uchun keyinroq onlayn toʻlov qoʻshiladi.', 2),
-  ('home', 'Maktabimizga demo koʻrsata olasizmi?', 'Ha. ''Demo soʻrash'' formasini toʻldiring, biz tizimni sizga koʻrsatib beramiz. Bu majburiyat emas.', 3),
+  ('home', 'Yechimni avval koʻrsata olasizmi?', 'Ha. Buyurtma yoki demo formasini toʻldiring, biz yechimni sizga koʻrsatib beramiz (maktablar uchun tayyor demo bor). Bu majburiyat emas.', 3),
   ('home', 'Ishga tushgandan keyin yordam berasizmi?', 'Ha. Har bir paketda bepul qoʻllab-quvvatlash davri bor, undan keyin oylik xizmat mavjud.', 4),
   ('pricing', 'Paketdagi narxga hamma narsa kiradimi?', 'Paketda koʻrsatilgan imkoniyatlar kiradi. Qoʻshimcha narsalar alohida, kelishilgan narxda qoʻshiladi.', 5),
   ('pricing', 'Maktablar uchun narx nega koʻrsatilmagan?', 'Maktab hajmi, oʻquvchilar soni va kerakli modullar har xil. Shuning uchun demo koʻrsatib, soʻng aniq narx aytamiz.', 6),

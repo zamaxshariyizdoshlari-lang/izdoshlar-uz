@@ -18,8 +18,8 @@
     },
     {
       "key": "maktab_biznes",
-      "name": "Maktab-Biznes",
-      "tagline": "Maktab va yirik tashkilotlar uchun",
+      "name": "Korporativ",
+      "tagline": "Yirik tashkilot va maktablar uchun",
       "price": "[NARX]",
       "popular": false,
       "features": ["Toʻliq tizim (ERP / veb-ilova)", "Foydalanuvchi rollari", "Hisobotlar va statistika", "Oʻqitish va ishga tushirish", "6 oy bepul qoʻllab-quvvatlash"]

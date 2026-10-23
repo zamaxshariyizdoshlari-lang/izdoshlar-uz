@@ -25,7 +25,7 @@ async function fromApi(path) {
   }
 }
 
-const business = process.env.VITE_ENABLE_BUSINESS === '1'
+const business = process.env.VITE_ENABLE_BUSINESS !== '0'
 const pages = ['', '/maktablar', '/loyihalar', '/xizmatlar', ...(business ? ['/narxlar'] : []), '/mahsulotlar', '/haqimda', '/blog', '/aloqa', '/maxfiylik', '/oferta']
 const lastmod = {}
 

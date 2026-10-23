@@ -100,7 +100,7 @@ export const offer: LegalDoc = {
       h: '2. Xizmat predmeti',
       p: [
         'Ijrochi Mijozga quyidagi xizmatlarni koʻrsatadi: sayt va veb-ilovalar yaratish, maktab boshqaruvi (ERP) va dars jadvali tizimlari, Telegram/Instagram botlar va AI agentlar, taʼlimiy kontent (taqdimot, shablon, video). Aniq hajm, natija va muddat har bir buyurtma boʻyicha alohida kelishiladi.',
-        'Saytdagi paketlar (Start, Pro, Maktab-Biznes) va qoʻshimcha xizmatlar tavsifi umumiy yoʻnalish hisoblanadi. Yakuniy tarkib kelishuvda belgilanadi.',
+        'Saytdagi paketlar (Start, Pro, Korporativ) va qoʻshimcha xizmatlar tavsifi umumiy yoʻnalish hisoblanadi. Yakuniy tarkib kelishuvda belgilanadi.',
       ],
     },
     {
@@ -127,7 +127,7 @@ export const offer: LegalDoc = {
     {
       h: '6. Tuzatishlar va qoʻllab-quvvatlash',
       p: [
-        'Kelishilgan texnik topshiriqqa mos kelmaydigan kamchiliklar bepul tuzatiladi. Topshirilgandan keyingi bepul qoʻllab-quvvatlash muddati tanlangan paketga muvofiq belgilanadi (Start: 1 oy, Pro: 3 oy, Maktab-Biznes: 6 oy). Bu muddatdan keyin yoki kelishuvdan tashqari yangi talablar alohida narxda bajariladi.',
+        'Kelishilgan texnik topshiriqqa mos kelmaydigan kamchiliklar bepul tuzatiladi. Topshirilgandan keyingi bepul qoʻllab-quvvatlash muddati tanlangan paketga muvofiq belgilanadi (Start: 1 oy, Pro: 3 oy, Korporativ: 6 oy). Bu muddatdan keyin yoki kelishuvdan tashqari yangi talablar alohida narxda bajariladi.',
       ],
     },
     {

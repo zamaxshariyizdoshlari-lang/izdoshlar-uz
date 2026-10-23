@@ -33,7 +33,7 @@ export const uz = {
     defaultDescriptionSchools:
       'Maktablar va oʻquv markazlari uchun boshqaruv tizimi (ERP), avtomatik dars jadvali va AI yordamchi, oʻqituvchilar uchun tayyor taqdimotlar. Oʻzbekistonda.',
     defaultDescription:
-      "Maktablar uchun ERP va dars jadvali, biznes uchun sayt, Telegram bot va AI agentlar, oʻqituvchilar uchun tayyor taqdimotlar. Oʻzbekistonda.",
+      "Biznes uchun sayt va veb-ilova, Telegram bot, AI agent va boshqaruv tizimlari (ERP). Maktab va oʻquv markazlari uchun tayyor yechim ham bor. Oʻzbekistonda.",
   },
   home: {
     heroSchools: {
@@ -44,29 +44,29 @@ export const uz = {
       ctaSecondary: 'Imkoniyatlarni koʻrish',
     },
     hero: {
-      badge: "Taʼlim va biznes uchun raqamli yechimlar",
-      title: "Maktabingiz va biznesingiz uchun ishonchli raqamli yechimlar",
-      text: "ERP, dars jadvali, sayt, Telegram bot va AI agentlar. Oddiy tilda tushuntiramiz, oʻz vaqtida topshiramiz.",
+      badge: "Biznes uchun raqamli yechimlar",
+      title: "Biznesingiz uchun ishonchli raqamli yechimlar",
+      text: "Sayt, Telegram bot, AI agent va boshqaruv tizimlari. Oddiy tilda tushuntiramiz, oʻz vaqtida topshiramiz.",
       ctaPrimary: 'Buyurtma berish',
       ctaSecondary: 'Loyihalarni koʻrish',
     },
     audiences: {
-      title: 'Siz kimsiz?',
-      subtitle: "Oʻzingizga mos yoʻnalishni tanlang",
+      title: 'Qaysi yoʻnalish sizga mos?',
+      subtitle: "Biznesingiz turiga mos yechimni tanlang",
       items: [
-        {
-          key: 'school',
-          title: 'Maktab / oʻquv markazi',
-          text: "Maktab ERP, avtomatik dars jadvali va AI yordamchi. Narxi maktab hajmiga qarab kelishiladi.",
-          cta: "Demo soʻrash",
-          to: '/maktablar',
-        },
         {
           key: 'business',
           title: 'Biznes / startap',
           text: "Sayt, veb-ilova, Telegram va Instagram botlar, AI agentlar. 3 ta tayyor paket va qoʻshimchalar.",
           cta: 'Paketlarni koʻrish',
           to: '/narxlar',
+        },
+        {
+          key: 'school',
+          title: 'Maktab / oʻquv markazi',
+          text: "Taʼlim biznesi uchun tayyor yechim: ERP, avtomatik dars jadvali va AI yordamchi. Narxi hajmga qarab kelishiladi.",
+          cta: 'Batafsil',
+          to: '/maktablar',
         },
         {
           key: 'teacher',
@@ -184,7 +184,7 @@ export const uz = {
   },
   about: {
     title: 'Haqimda',
-    p1: "Men taʼlim sohasi uchun dasturlar yaratadigan dasturchiman. Maktablarning kundalik ishini yengillashtiradigan tizimlardan tortib, bizneslar uchun sayt va botlargacha ishlayman.",
+    p1: "Men biznes uchun raqamli yechimlar yarataman: sayt va veb-ilovalar, Telegram botlar, AI agentlar va boshqaruv tizimlari. Taʼlim sohasida (maktablar, oʻquv markazlari) tayyor ERP va dars jadvali yechimlari ham bor.",
     p2: "Ishimda uchta qoidaga amal qilaman: oddiy tilda tushuntirish, kelishilgan muddatda topshirish va topshirgandan keyin ham yordam berish.",
     valuesTitle: 'Qadriyatlarim',
     values: [
@@ -253,7 +253,7 @@ export const uz = {
       custom: 'Bilmayman / maxsus',
       start: 'Start',
       pro: 'Pro',
-      maktab_biznes: 'Maktab-Biznes',
+      maktab_biznes: 'Korporativ',
     } as Record<string, string>,
     budgetOptions: {
       unknown: 'Aniq emas',
@@ -332,7 +332,7 @@ export const uz = {
   },
   schools: schoolsPage,
   footer: {
-    tagline: "Taʼlim va biznes uchun raqamli yechimlar.",
+    tagline: "Biznes uchun raqamli yechimlar.",
     pages: 'Sahifalar',
     contacts: 'Aloqa',
     rights: 'Barcha huquqlar himoyalangan.',

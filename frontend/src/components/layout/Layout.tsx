@@ -10,10 +10,10 @@ const ORDER_LABEL = ENABLE_BUSINESS ? t.nav.order : t.nav.demo
 const ORDER_TO = ENABLE_BUSINESS ? '/aloqa' : '/aloqa?tur=demo'
 
 const allLinks = [
-  { to: '/maktablar', label: t.nav.schools },
   { to: '/loyihalar', label: t.nav.projects },
   { to: '/xizmatlar', label: t.nav.services },
   { to: '/narxlar', label: t.nav.pricing },
+  { to: '/maktablar', label: t.nav.schools },
   { to: '/mahsulotlar', label: t.nav.products },
   { to: '/blog', label: t.nav.blog },
   { to: '/haqimda', label: t.nav.about },
