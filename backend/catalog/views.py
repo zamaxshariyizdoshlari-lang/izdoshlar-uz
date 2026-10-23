@@ -1,8 +1,9 @@
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
+from rest_framework.permissions import AllowAny, IsAdminUser
 
 from . import serializers as s
-from .models import FAQ, AddOn, ComparisonRow, Package, Post, Project, Testimonial
+from .models import FAQ, AddOn, ComparisonRow, Package, Post, Product, Project, Testimonial
 
 
 class PublicReadOnly(viewsets.ReadOnlyModelViewSet):
@@ -62,3 +63,29 @@ class PostViewSet(PublicReadOnly):
     model = Post
     serializer_class = s.PostSerializer
     lookup_field = "slug"
+
+
+class ProductViewSet(PublicReadOnly):
+    model = Product
+    serializer_class = s.ProductSerializer
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        category = self.request.query_params.get("category")
+        return qs.filter(category=category) if category else qs
+
+
+class AdminProductViewSet(viewsets.ModelViewSet):
+    """Mahsulotlarni boshqarish (faqat xodim, token bilan). Yashirinlari ham koʻrinadi."""
+
+    permission_classes = [IsAdminUser]
+    serializer_class = s.AdminProductSerializer
+    queryset = Product.objects.all()
+    pagination_class = None
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    def perform_destroy(self, instance):
+        if instance.cover:
+            instance.cover.delete(save=False)
+        instance.delete()

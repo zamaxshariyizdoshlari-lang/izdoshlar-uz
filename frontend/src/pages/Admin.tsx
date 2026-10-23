@@ -1,6 +1,7 @@
 import { ExternalLink, LogOut, Phone, RefreshCw, Send } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import { Head } from 'vite-react-ssg'
+import { ProductsAdmin } from '../components/admin/ProductsAdmin'
 import { t } from '../i18n'
 import {
   ApiError,
@@ -154,7 +155,25 @@ function OrderCard({ order, token, onChange }: { order: AdminOrder; token: strin
   )
 }
 
-function Dashboard({ token, onLogout }: { token: string; onLogout: (expired?: boolean) => void }) {
+function AdminTabs({ tab, onChange }: { tab: string; onChange: (t: string) => void }) {
+  return (
+    <div className="mb-6 flex gap-2 border-b border-line" role="tablist">
+      {[['orders', a.tabs.orders], ['products', a.tabs.products]].map(([k, label]) => (
+        <button
+          key={k}
+          role="tab"
+          aria-selected={tab === k}
+          onClick={() => onChange(k)}
+          className={`-mb-px border-b-4 px-4 py-2 font-bold transition ${tab === k ? 'border-brand-600 text-brand-700' : 'border-transparent text-ink-500 hover:text-ink-900'}`}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function Dashboard({ token, onLogout, tabs }: { token: string; onLogout: (expired?: boolean) => void; tabs: ReactNode }) {
   const [orders, setOrders] = useState<AdminOrder[] | null>(null)
   const [filter, setFilter] = useState('all')
   const [q, setQ] = useState('')
@@ -206,6 +225,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: (expired?: bo
           </button>
         </div>
       </div>
+      {tabs}
 
       <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label={a.status}>
         {['all', ...STATUSES].map((s) => (
@@ -235,6 +255,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: (expired?: bo
 export function Component() {
   const [token, setToken] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
+  const [tab, setTab] = useState('orders')
 
   // Token faqat brauzerda oʻqiladi (prerender vaqtida boʻsh sahifa chiqadi)
   useEffect(() => {
@@ -259,7 +280,9 @@ export function Component() {
         <meta name="robots" content="noindex, nofollow" />
       </Head>
       <div className="container-page">
-        {ready && (token ? <Dashboard token={token} onLogout={handleLogout} /> : <LoginForm onLogin={setToken} />)}
+        {ready && !token && <LoginForm onLogin={setToken} />}
+        {ready && token && tab === 'orders' && <Dashboard token={token} onLogout={handleLogout} tabs={<AdminTabs tab={tab} onChange={setTab} />} />}
+        {ready && token && tab === 'products' && <ProductsAdmin token={token} onLogout={handleLogout} tabs={<AdminTabs tab={tab} onChange={setTab} />} />}
       </div>
     </section>
   )

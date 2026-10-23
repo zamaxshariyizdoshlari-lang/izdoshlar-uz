@@ -49,6 +49,14 @@ export interface Testimonial {
   role: string
   text: string
 }
+export interface Product {
+  slug: string
+  title: string
+  description: string
+  category: string
+  price: string
+  cover: string
+}
 export interface PricingData {
   packages: Pkg[]
   comparison: ComparisonRow[]
@@ -102,6 +110,7 @@ export const getPricing = async (): Promise<PricingData> => {
 }
 export const getFaq = (scope: string) =>
   fetchApi<FaqItem[]>(`/faq/?scope=${scope}`, () => (faqData as FaqItem[]).filter((f) => f.scope === scope))
+export const getProducts = () => fetchApi<Product[]>('/products/', () => [])
 export const getTestimonials = () =>
   fetchApi<Testimonial[]>('/testimonials/', () => testimonialsData.filter((t) => !('placeholder' in t && t.placeholder)))
 

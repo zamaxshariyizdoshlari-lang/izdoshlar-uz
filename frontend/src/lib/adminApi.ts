@@ -25,9 +25,11 @@ export interface AdminOrder {
 
 export class ApiError extends Error {
   status: number
-  constructor(status: number) {
+  body: unknown
+  constructor(status: number, body?: unknown) {
     super(`HTTP ${status}`)
     this.status = status
+    this.body = body
   }
 }
 
@@ -62,11 +64,12 @@ async function call(path: string, token: string | null, init: RequestInit = {}) 
   const res = await fetch(`${API_URL}${path}`, {
     ...init,
     headers: {
-      'Content-Type': 'application/json',
+      // FormData uchun brauzer oʻzi chegarali Content-Type qoʻyadi
+      ...(init.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
       ...(token ? { Authorization: `Token ${token}` } : {}),
     },
   })
-  if (!res.ok) throw new ApiError(res.status)
+  if (!res.ok) throw new ApiError(res.status, res.status === 400 ? await res.json().catch(() => null) : undefined)
   return res
 }
 
@@ -91,4 +94,34 @@ export async function fetchOrders(token: string): Promise<AdminOrder[]> {
 
 export async function updateOrder(token: string, id: string, patch: Partial<Pick<AdminOrder, 'status' | 'admin_note'>>): Promise<AdminOrder> {
   return (await call(`/admin/orders/${id}/`, token, { method: 'PATCH', body: JSON.stringify(patch) })).json()
+}
+
+// ---------- Mahsulotlar ----------
+export interface AdminProduct {
+  id: number
+  slug: string
+  title: string
+  description: string
+  category: string
+  price: string
+  cover: string | null
+  published: boolean
+  order: number
+}
+
+export async function fetchProducts(token: string): Promise<AdminProduct[]> {
+  return (await call('/admin/products/', token)).json()
+}
+
+export async function createProduct(token: string, body: FormData): Promise<AdminProduct> {
+  return (await call('/admin/products/', token, { method: 'POST', body })).json()
+}
+
+/** `body`: FormData (rasm bilan) yoki JSON satr (masalan, faqat published). */
+export async function updateProduct(token: string, id: number, body: FormData | string): Promise<AdminProduct> {
+  return (await call(`/admin/products/${id}/`, token, { method: 'PATCH', body })).json()
+}
+
+export async function deleteProduct(token: string, id: number): Promise<void> {
+  await call(`/admin/products/${id}/`, token, { method: 'DELETE' })
 }

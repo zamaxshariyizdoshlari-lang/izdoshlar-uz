@@ -11,7 +11,7 @@ import requests
 from django.conf import settings
 from django.db.models.signals import post_delete, post_save
 
-from .models import FAQ, AddOn, ComparisonRow, Package, Post, Project, ProjectImage, Testimonial
+from .models import FAQ, AddOn, ComparisonRow, Package, Post, Product, Project, ProjectImage, Testimonial
 
 logger = logging.getLogger(__name__)
 _timer = None
@@ -39,6 +39,6 @@ def schedule_rebuild(**_kwargs):
 
 
 def connect():
-    for model in (Project, ProjectImage, Package, ComparisonRow, AddOn, Testimonial, FAQ, Post):
+    for model in (Project, ProjectImage, Package, ComparisonRow, AddOn, Testimonial, FAQ, Post, Product):
         post_save.connect(schedule_rebuild, sender=model, dispatch_uid=f"rebuild-save-{model.__name__}")
         post_delete.connect(schedule_rebuild, sender=model, dispatch_uid=f"rebuild-del-{model.__name__}")

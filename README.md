@@ -143,6 +143,19 @@ npx netlify-cli deploy --prod --no-build --dir=dist
 
 Ishlab chiqarishda `VITE_API_URL` berilmasa, sayt API'ga murojaat qilmaydi va zaxira kontentdan foydalanadi (buyurtma formasi esa backend bo'lmaguncha xato beradi). Doimiy yechim: Netlify'da GitHub repo'ni ulab (Base directory: `frontend`), o'zgaruvchilarni Site settings → Environment variables ga yozish; shunda har `git push` o'zi build qilinadi va lokal `.env` ishtirok etmaydi.
 
+## Mahsulotlar katalogi va saytdagi boshqaruv
+
+Mahsulotlarni (taqdimot, shablon, video) ikki joydan boshqarish mumkin:
+
+- **Saytning o'zidan:** `/boshqaruv` -> login -> **Mahsulotlar** tabi. Qo'shish, tahrirlash, rasm yuklash (PNG/JPG/WebP, 5 MB gacha), yashirish/ko'rsatish va o'chirish. Buyurtmalar ham shu sahifada (**Buyurtmalar** tabi).
+- **Django admin:** `/admin/` -> Kontent -> Mahsulotlar.
+
+Ochiq katalog: `/mahsulotlar` sahifasi va `GET /api/v1/products/` (faqat "saytda ko'rsatish" belgilanganlari). Har bir kartadagi "Buyurtma berish" tugmasi formani mahsulot nomi bilan to'ldirib ochadi. Boshqaruv API: `/api/v1/admin/products/` (token bilan, faqat xodim).
+
+Hozircha katalog onlayn to'lovsiz: mijoz buyurtma qoldiradi, siz bilan bog'lanadi. To'lov va fayl yuklab olish keyingi bosqichda shu modelga ulanadi.
+
+**Eslatma:** bu faqat backend ishlaganda ishlaydi. Jonli saytga chiqarish uchun backend'ni serverga joylash, `VITE_API_URL` ga manzilini yozish va rasmlar uchun nginx'da `/media/` ni berish kerak (yuqoridagi deploy bo'limiga qarang).
+
 ## Biznes yo'nalishini yoqish/o'chirish
 
 Hozircha sayt faqat maktablar va o'qituvchilar uchun ochiq. Biznes yo'nalishi (sayt/bot/AI agent xizmatlari, Narxlar sahifasi va paketlar) `VITE_ENABLE_BUSINESS` bilan boshqariladi:

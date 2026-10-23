@@ -145,3 +145,39 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Product(Publishable):
+    """Tayyor raqamli mahsulot (taqdimot, shablon, video). Hozircha katalog; onlayn toʻlov keyinroq."""
+
+    class Category(models.TextChoices):
+        PRESENTATION = "taqdimot", "Taqdimot"
+        TEMPLATE = "shablon", "Shablon"
+        VIDEO = "video", "Video"
+        OTHER = "boshqa", "Boshqa"
+
+    slug = models.SlugField("URL manzil", unique=True, blank=True, max_length=80, help_text="Boʻsh qoldirsangiz nomidan yaratiladi")
+    title = models.CharField("Nomi", max_length=150)
+    description = models.TextField("Tavsif", blank=True)
+    category = models.CharField("Toifa", max_length=10, choices=Category.choices, default=Category.OTHER)
+    price_text = models.CharField("Narx (matn)", max_length=60, blank=True, help_text="Masalan: 50 000 soʻm yoki Kelishiladi")
+    cover = models.ImageField("Rasm", upload_to="products/", blank=True)
+
+    class Meta(Publishable.Meta):
+        verbose_name = "Mahsulot"
+        verbose_name_plural = "Mahsulotlar"
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+
+            base = slugify(self.title)[:60] or "mahsulot"
+            slug, n = base, 2
+            while Product.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base}-{n}"
+                n += 1
+            self.slug = slug
+        super().save(*args, **kwargs)

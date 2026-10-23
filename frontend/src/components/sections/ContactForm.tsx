@@ -74,9 +74,10 @@ export function ContactForm() {
     const q = new URLSearchParams(search)
     setForm((f) => ({
       ...f,
-      kind: q.get('tur') === 'demo' ? 'demo' : f.kind,
+      kind: q.get('tur') === 'demo' ? 'demo' : q.get('mahsulot') || q.get('xizmat') ? 'order' : f.kind,
       service_type: q.get('tur') === 'demo' ? 'erp' : q.get('xizmat') && q.get('xizmat')! in serviceOptions ? q.get('xizmat')! : f.service_type,
       package: q.get('paket') && q.get('paket')! in c.packageOptions ? q.get('paket')! : f.package,
+      description: q.get('mahsulot') && !f.description ? `Mahsulot: ${q.get('mahsulot')!.slice(0, 120)}\n` : f.description,
     }))
   }, [search])
 

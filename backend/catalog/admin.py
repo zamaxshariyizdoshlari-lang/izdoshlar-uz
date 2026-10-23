@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import FAQ, AddOn, ComparisonRow, Package, Post, Project, ProjectImage, Testimonial
+from .models import FAQ, AddOn, ComparisonRow, Package, Post, Product, Project, ProjectImage, Testimonial
 
 
 class ProjectImageInline(admin.TabularInline):
@@ -56,4 +56,13 @@ class FAQAdmin(OrderedAdmin):
 class PostAdmin(admin.ModelAdmin):
     list_display = ("title", "date", "published")
     list_editable = ("published",)
+    prepopulated_fields = {"slug": ("title",)}
+
+
+@admin.register(Product)
+class ProductAdmin(OrderedAdmin):
+    list_display = ("title", "category", "price_text", "published", "order")
+    list_editable = ("price_text", "published", "order")
+    list_filter = ("category", "published")
+    search_fields = ("title", "description")
     prepopulated_fields = {"slug": ("title",)}
