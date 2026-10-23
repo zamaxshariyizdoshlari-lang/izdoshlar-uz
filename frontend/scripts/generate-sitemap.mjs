@@ -20,7 +20,7 @@ async function fromApi(path) {
   }
 }
 
-const pages = ['', '/loyihalar', '/xizmatlar', '/narxlar', '/mahsulotlar', '/haqimda', '/blog', '/aloqa']
+const pages = ['', '/loyihalar', '/xizmatlar', '/narxlar', '/mahsulotlar', '/haqimda', '/blog', '/aloqa', '/maxfiylik', '/oferta']
 const lastmod = {}
 
 const projects = (await fromApi('/projects/')) ?? JSON.parse(readFileSync(join(root, 'src/data/projects.json'), 'utf8'))

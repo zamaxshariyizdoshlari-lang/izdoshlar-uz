@@ -13,6 +13,6 @@ urlpatterns = [
     path("api/v1/", include("catalog.urls")),
 ]
 
-# Ishlab chiqarishda /media/ ni nginx beradi (README'ga qarang)
+# Ishlab chiqarishda /media/ ni nginx beradi (READMEʼga qarang)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

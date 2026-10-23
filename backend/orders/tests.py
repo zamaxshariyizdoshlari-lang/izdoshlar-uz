@@ -17,6 +17,7 @@ VALID = {
     "package": "pro",
     "budget_range": "mid",
     "description": "Maktabimiz uchun sayt kerak.",
+    "consent": True,
 }
 
 
@@ -90,6 +91,16 @@ class OrderEndpointTests(TestCase):
             codes = [self.client.post(URL, VALID, format="json").status_code for _ in range(3)]
         self.assertEqual(codes, [201, 201, 429])
 
+    def test_consent_is_required(self):
+        data = {k: v for k, v in VALID.items() if k != "consent"}
+        self.assertEqual(self.client.post(URL, data, format="json").status_code, 400)
+        self.assertEqual(self.client.post(URL, {**data, "consent": False}, format="json").status_code, 400)
+        self.assertEqual(ServiceOrder.objects.count(), 0)
+
+    def test_consent_time_is_stored(self):
+        self.client.post(URL, VALID, format="json")
+        self.assertIsNotNone(ServiceOrder.objects.get().consented_at)
+
     def test_health(self):
         self.assertEqual(self.client.get("/api/v1/health/").status_code, 200)
 
@@ -127,3 +138,63 @@ class TelegramTests(TestCase):
         order.refresh_from_db()
         self.assertEqual(order.notify_error, "RuntimeError")
         self.assertNotIn("SECRET-TOKEN", order.notify_error)
+
+
+class NotificationFallbackTests(TestCase):
+    def make_order(self):
+        return ServiceOrder.objects.create(name="Ali", phone="+998901234567", service_type="bot", description="Test")
+
+    @override_settings(TELEGRAM_BOT_TOKEN="T", TELEGRAM_CHAT_ID="1", ORDER_NOTIFY_EMAIL="me@example.com",
+                       EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_email_fallback_when_telegram_fails(self):
+        from django.core import mail
+
+        order = self.make_order()
+        with mock.patch("orders.telegram.requests.post", side_effect=ConnectionError("x")):
+            self.assertTrue(send_order_notification(order.pk))
+        order.refresh_from_db()
+        self.assertIsNotNone(order.notified_at)
+        self.assertIn("ConnectionError", order.notify_error)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("Ali", mail.outbox[0].body)
+        self.assertNotIn("<b>", mail.outbox[0].body)
+
+    @override_settings(TELEGRAM_BOT_TOKEN="T", TELEGRAM_CHAT_ID="1", ORDER_NOTIFY_EMAIL="me@example.com",
+                       EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_no_email_when_telegram_succeeds(self):
+        from django.core import mail
+
+        order = self.make_order()
+        with mock.patch("orders.telegram.requests.post") as post:
+            post.return_value.raise_for_status.return_value = None
+            self.assertTrue(send_order_notification(order.pk))
+        self.assertEqual(len(mail.outbox), 0)
+
+    @override_settings(TELEGRAM_BOT_TOKEN="T", TELEGRAM_CHAT_ID="1", ORDER_NOTIFY_EMAIL="")
+    def test_both_channels_failing_keeps_order_unnotified(self):
+        order = self.make_order()
+        with mock.patch("orders.telegram.requests.post", side_effect=ConnectionError("x")):
+            self.assertFalse(send_order_notification(order.pk))
+        order.refresh_from_db()
+        self.assertIsNone(order.notified_at)
+
+
+class RetryCommandTests(TestCase):
+    @override_settings(TELEGRAM_BOT_TOKEN="T", TELEGRAM_CHAT_ID="1")
+    def test_retries_only_recent_unnotified_orders(self):
+        from datetime import timedelta
+
+        from django.core.management import call_command
+        from django.utils import timezone
+
+        fresh = ServiceOrder.objects.create(name="A", phone="+998901234567", service_type="bot")
+        done = ServiceOrder.objects.create(name="B", phone="+998901234567", service_type="bot", notified_at=timezone.now())
+        old = ServiceOrder.objects.create(name="C", phone="+998901234567", service_type="bot")
+        ServiceOrder.objects.filter(pk=old.pk).update(created_at=timezone.now() - timedelta(days=10))
+        with mock.patch("orders.telegram.requests.post") as post:
+            post.return_value.raise_for_status.return_value = None
+            call_command("retry_notifications", pause=0, verbosity=0)
+        self.assertEqual(post.call_count, 1)
+        fresh.refresh_from_db(), done.refresh_from_db(), old.refresh_from_db()
+        self.assertIsNotNone(fresh.notified_at)
+        self.assertIsNone(old.notified_at)

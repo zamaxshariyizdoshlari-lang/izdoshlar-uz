@@ -54,7 +54,7 @@ export function clearToken() {
     sessionStorage.removeItem(KEY)
     localStorage.removeItem(KEY)
   } catch {
-    /* e'tiborsiz */
+    /* eʼtiborsiz */
   }
 }
 

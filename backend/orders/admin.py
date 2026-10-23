@@ -29,12 +29,12 @@ class ServiceOrderAdmin(admin.ModelAdmin):
     list_editable = ("status",)
     list_filter = ("status", "kind", "service_type", "package", "audience")
     search_fields = ("name", "phone", "telegram", "description", "school_name")
-    readonly_fields = ("id", "created_at", "status_changed_at", "ip_hash", "notified_at", "notify_error")
+    readonly_fields = ("id", "created_at", "status_changed_at", "ip_hash", "consented_at", "notified_at", "notify_error")
     inlines = [StatusChangeInline]
     actions = [_make_action(v, l) for v, l in ServiceOrder.Status.choices]
 
     def save_model(self, request, obj, form, change):
-        # Statusni qo'lda yoki list_editable orqali o'zgartirish ham tarixga yoziladi
+        # Statusni qoʻlda yoki list_editable orqali oʻzgartirish ham tarixga yoziladi
         if change and "status" in form.changed_data:
             new = obj.status
             obj.status = form.initial.get("status", obj.status)

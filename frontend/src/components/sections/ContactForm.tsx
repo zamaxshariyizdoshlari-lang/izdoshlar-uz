@@ -1,6 +1,6 @@
 import { CheckCircle2 } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { t } from '../../i18n'
 import { submitOrder, type OrderPayload } from '../../lib/api'
 
@@ -22,6 +22,7 @@ type FormState = {
   student_count: string
   current_system: string
   website: string
+  consent: boolean
 }
 
 const initial: FormState = {
@@ -38,6 +39,7 @@ const initial: FormState = {
   student_count: '',
   current_system: '',
   website: '',
+  consent: false,
 }
 
 function Select({ id, value, onChange, options }: { id: string; value: string; onChange: (v: string) => void; options: Record<string, string> }) {
@@ -85,6 +87,7 @@ export function ContactForm() {
     if (isDemo && !form.school_name.trim()) e.school_name = c.errSchool
     if (!isDemo && form.description.trim().length < 10) e.description = c.errDescription
     if (form.file_url.trim() && !/^https?:\/\//i.test(form.file_url.trim())) e.file_url = c.errUrl
+    if (!form.consent) e.consent = c.errConsent
     return e
   }
 
@@ -115,6 +118,7 @@ export function ContactForm() {
       source_page: pathname + search,
       website: form.website,
       opened_at: openedAt.current,
+      consent: form.consent,
     }
     const res = await submitOrder(payload)
     if (res.ok) {
@@ -156,7 +160,7 @@ export function ContactForm() {
 
   return (
     <form onSubmit={onSubmit} noValidate className="card space-y-5">
-      <div className="grid grid-cols-2 gap-2 rounded-full bg-cream-100 p-1" role="group" aria-label="So'rov turi">
+      <div className="grid grid-cols-2 gap-2 rounded-full bg-cream-100 p-1" role="group" aria-label="Soʻrov turi">
         {(['order', 'demo'] as const).map((k) => (
           <button
             type="button"
@@ -242,7 +246,28 @@ export function ContactForm() {
         </>
       )}
 
-      {/* Honeypot: odamga ko'rinmaydi, botlar to'ldiradi */}
+      <div>
+        <label className="flex items-start gap-3 text-sm text-ink-700">
+          <input
+            id="f-consent"
+            type="checkbox"
+            checked={form.consent}
+            onChange={(e) => setForm((f) => ({ ...f, consent: e.target.checked }))}
+            className="mt-1 h-5 w-5 shrink-0 accent-brand-600"
+            {...inv('consent')}
+          />
+          <span>
+            {c.consentPre}
+            <Link to="/maxfiylik" target="_blank" className="font-bold text-brand-700 underline">
+              {c.consentLink}
+            </Link>
+            {c.consentPost}
+          </span>
+        </label>
+        {err('consent')}
+      </div>
+
+      {/* Honeypot: odamga koʻrinmaydi, botlar toʻldiradi */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
         <label htmlFor="f-website">Veb-sayt</label>
         <input id="f-website" name="website" tabIndex={-1} autoComplete="off" value={form.website} onChange={(e) => set('website')(e.target.value)} />

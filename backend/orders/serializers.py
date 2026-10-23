@@ -12,9 +12,11 @@ TG_RE = re.compile(r"^@?[A-Za-z][A-Za-z0-9_]{4,31}$")
 
 
 class ServiceOrderSerializer(serializers.ModelSerializer):
-    # Spamdan himoya: odam ko'rmaydigan maydon va forma ochilgan vaqt (ms)
+    # Spamdan himoya: odam koʻrmaydigan maydon va forma ochilgan vaqt (ms)
     website = serializers.CharField(required=False, allow_blank=True, write_only=True)
     opened_at = serializers.IntegerField(required=False, write_only=True)
+    # Shaxsiy maʼlumotlarni qayta ishlashga rozilik (maxfiylik siyosati)
+    consent = serializers.BooleanField(write_only=True)
 
     class Meta:
         model = ServiceOrder
@@ -22,9 +24,14 @@ class ServiceOrderSerializer(serializers.ModelSerializer):
             "id", "kind", "name", "phone", "telegram", "audience", "service_type",
             "package", "budget_range", "description", "file_url",
             "school_name", "student_count", "current_system", "source_page",
-            "website", "opened_at",
+            "website", "opened_at", "consent",
         ]
         read_only_fields = ["id"]
+
+    def validate_consent(self, value):
+        if value is not True:
+            raise serializers.ValidationError("Davom etish uchun maxfiylik siyosatiga rozilik bering.")
+        return value
 
     def validate_name(self, value):
         value = value.strip()
@@ -35,13 +42,13 @@ class ServiceOrderSerializer(serializers.ModelSerializer):
     def validate_phone(self, value):
         value = re.sub(r"[\s\-()]", "", value or "")
         if value and not PHONE_RE.match(value):
-            raise serializers.ValidationError("Telefon raqami +998901234567 ko'rinishida bo'lishi kerak.")
+            raise serializers.ValidationError("Telefon raqami +998901234567 koʻrinishida boʻlishi kerak.")
         return value
 
     def validate_telegram(self, value):
         value = (value or "").strip()
         if value and not TG_RE.match(value):
-            raise serializers.ValidationError("Telegram username noto'g'ri (masalan, @username).")
+            raise serializers.ValidationError("Telegram username notoʻgʻri (masalan, @username).")
         return value
 
     def validate_file_url(self, value):
@@ -51,7 +58,7 @@ class ServiceOrderSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if not attrs.get("phone") and not attrs.get("telegram"):
-            raise serializers.ValidationError("Telefon yoki Telegram'dan kamida bittasini kiriting.")
+            raise serializers.ValidationError("Telefon yoki Telegramʼdan kamida bittasini kiriting.")
         if attrs.get("kind") == ServiceOrder.Kind.DEMO:
             if not attrs.get("school_name"):
                 raise serializers.ValidationError({"school_name": "Maktab nomini kiriting."})

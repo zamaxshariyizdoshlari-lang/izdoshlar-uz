@@ -8,7 +8,7 @@ from django.utils import timezone
 class ServiceOrder(models.Model):
     class Kind(models.TextChoices):
         ORDER = "order", "Buyurtma"
-        DEMO = "demo", "Demo so'rovi"
+        DEMO = "demo", "Demo soʻrovi"
 
     class Audience(models.TextChoices):
         SCHOOL = "school", "Maktab"
@@ -32,7 +32,7 @@ class ServiceOrder(models.Model):
     class Budget(models.TextChoices):
         UNKNOWN = "unknown", "Aniq emas"
         LOW = "low", "Kam"
-        MID = "mid", "O'rta"
+        MID = "mid", "Oʻrta"
         HIGH = "high", "Yuqori"
         TALK = "talk", "Kelishamiz"
 
@@ -47,7 +47,7 @@ class ServiceOrder(models.Model):
     kind = models.CharField(max_length=10, choices=Kind.choices, default=Kind.ORDER)
     status = models.CharField(max_length=12, choices=Status.choices, default=Status.NEW)
     status_changed_at = models.DateTimeField(null=True, blank=True, editable=False)
-    admin_note = models.TextField("Ichki izoh", blank=True, help_text="Faqat sizga ko'rinadi: narx, kelishuv va hokazo")
+    admin_note = models.TextField("Ichki izoh", blank=True, help_text="Faqat sizga koʻrinadi: narx, kelishuv va hokazo")
 
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=20, blank=True)
@@ -60,7 +60,7 @@ class ServiceOrder(models.Model):
     description = models.TextField(max_length=3000, blank=True)
     file_url = models.URLField(max_length=500, blank=True)
 
-    # Faqat demo so'rovi uchun
+    # Faqat demo soʻrovi uchun
     school_name = models.CharField(max_length=150, blank=True)
     student_count = models.PositiveIntegerField(null=True, blank=True)
     current_system = models.CharField(max_length=150, blank=True)
@@ -68,6 +68,7 @@ class ServiceOrder(models.Model):
     source_page = models.CharField(max_length=200, blank=True)
     ip_hash = models.CharField(max_length=64, blank=True)
 
+    consented_at = models.DateTimeField("Rozilik vaqti", null=True, blank=True, editable=False)
     notified_at = models.DateTimeField(null=True, blank=True)
     notify_error = models.CharField(max_length=300, blank=True)
 
@@ -80,7 +81,7 @@ class ServiceOrder(models.Model):
         return f"{self.get_kind_display()}: {self.name} ({self.created_at:%Y-%m-%d})"
 
     def change_status(self, new_status, user=None):
-        """Statusni o'zgartiradi va tarixga yozadi. O'zgarish bo'lmasa False qaytaradi."""
+        """Statusni oʻzgartiradi va tarixga yozadi. Oʻzgarish boʻlmasa False qaytaradi."""
         if new_status == self.status:
             return False
         old = self.status
@@ -100,5 +101,5 @@ class StatusChange(models.Model):
 
     class Meta:
         ordering = ["-changed_at"]
-        verbose_name = "Status o'zgarishi"
+        verbose_name = "Status oʻzgarishi"
         verbose_name_plural = "Status tarixi"

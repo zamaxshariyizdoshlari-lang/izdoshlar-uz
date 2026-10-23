@@ -1,4 +1,5 @@
 from django.db import connection
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -23,9 +24,11 @@ class OrderCreateView(APIView):
             # Botga muvaffaqiyat ko'rsatamiz, lekin hech narsa saqlamaymiz
             return Response({"ok": True}, status=status.HTTP_201_CREATED)
 
-        data = {k: v for k, v in serializer.validated_data.items() if k not in ("website", "opened_at")}
+        data = {k: v for k, v in serializer.validated_data.items() if k not in ("website", "opened_at", "consent")}
         ip = OrderThrottle().get_ident(request)
-        order = ServiceOrder.objects.create(**data, ip_hash=ServiceOrderSerializer.hash_ip(ip))
+        order = ServiceOrder.objects.create(
+            **data, ip_hash=ServiceOrderSerializer.hash_ip(ip), consented_at=timezone.now()
+        )
         notify_async(order.pk)
         return Response({"ok": True, "id": str(order.pk)}, status=status.HTTP_201_CREATED)
 

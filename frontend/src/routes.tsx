@@ -25,6 +25,8 @@ export const routes: RouteRecord[] = [
         getStaticPaths: async () => (await getPosts()).map((p) => `blog/${p.slug}`),
       },
       { path: 'aloqa', lazy: () => import('./pages/Contact') },
+      { path: 'maxfiylik', lazy: () => import('./pages/Privacy') },
+      { path: 'oferta', lazy: () => import('./pages/Offer') },
       { path: 'boshqaruv', lazy: () => import('./pages/Admin') },
       { path: '*', lazy: () => import('./pages/NotFound') },
     ],

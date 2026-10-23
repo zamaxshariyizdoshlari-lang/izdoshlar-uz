@@ -117,8 +117,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAdminUser"],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_THROTTLE_RATES": {
-        "orders": os.getenv("ORDER_THROTTLE", "5/hour"),
-        "orders_burst": os.getenv("ORDER_THROTTLE_BURST", "2/minute"),
+        "orders": os.getenv("ORDER_THROTTLE", "15/hour"),
+        "orders_burst": os.getenv("ORDER_THROTTLE_BURST", "3/minute"),
         "login": "10/hour",
     },
     "NUM_PROXIES": NUM_PROXIES or None,
@@ -126,6 +126,19 @@ REST_FRAMEWORK = {
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
+
+# Zaxira kanal: Telegram ishlamasa buyurtma shu emailga yuboriladi (boʻsh boʻlsa oʻchiq)
+ORDER_NOTIFY_EMAIL = os.getenv("ORDER_NOTIFY_EMAIL", "")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@localhost")
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend" if DEBUG else "django.core.mail.backends.smtp.EmailBackend",
+)
+EMAIL_HOST = os.getenv("EMAIL_HOST", "localhost")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "1") == "1"
 
 # Formani odam emas, bot juda tez yuborganini aniqlash (soniya)
 ORDER_MIN_FILL_SECONDS = int(os.getenv("ORDER_MIN_FILL_SECONDS", "3"))
@@ -136,3 +149,6 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_HSTS_SECONDS = 31536000
+    # Barcha subdomenlar HTTPS boʻlsagina yoqing
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv("HSTS_INCLUDE_SUBDOMAINS", "0") == "1"
+    SECURE_HSTS_PRELOAD = os.getenv("HSTS_PRELOAD", "0") == "1"

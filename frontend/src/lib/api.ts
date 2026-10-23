@@ -1,5 +1,5 @@
-// Ma'lumot qatlami. Kontent Django REST API'dan olinadi (build vaqtida prerender uchun,
-// brauzerda sahifalar orasida o'tishda yangilanadi). API javob bermasa, repo ichidagi
+// Maʼlumot qatlami. Kontent Django REST APIʼdan olinadi (build vaqtida prerender uchun,
+// brauzerda sahifalar orasida oʻtishda yangilanadi). API javob bermasa, repo ichidagi
 // data/*.json va content/blog/*.md fayllari zaxira sifatida ishlatiladi.
 import packagesData from '../data/packages.json'
 import faqData from '../data/faq.json'
@@ -55,7 +55,7 @@ export interface PricingData {
   addons: AddOn[]
 }
 
-/** API'dan o'qiydi. Xato bo'lsa zaxira qiymatni qaytaradi (VITE_REQUIRE_API=1 bo'lsa build to'xtaydi). */
+/** APIʼdan oʻqiydi. Xato boʻlsa zaxira qiymatni qaytaradi (VITE_REQUIRE_API=1 boʻlsa build toʻxtaydi). */
 async function request<T>(path: string): Promise<T> {
   let lastErr: unknown
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -71,7 +71,7 @@ async function request<T>(path: string): Promise<T> {
   throw lastErr
 }
 
-// Build (Node) vaqtida har bir manzil bir marta so'raladi; brauzerda har safar yangi ma'lumot olinadi
+// Build (Node) vaqtida har bir manzil bir marta soʻraladi; brauzerda har safar yangi maʼlumot olinadi
 const buildCache = new Map<string, Promise<unknown>>()
 
 async function fetchApi<T>(path: string, fallback: () => T): Promise<T> {
@@ -130,6 +130,7 @@ export interface OrderPayload {
   source_page: string
   website: string // honeypot
   opened_at: number
+  consent: boolean
 }
 
 export type SubmitResult =

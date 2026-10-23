@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Publishable(models.Model):
-    published = models.BooleanField("Saytda ko'rsatish", default=True)
+    published = models.BooleanField("Saytda koʻrsatish", default=True)
     order = models.PositiveIntegerField("Tartib", default=0, help_text="Kichik raqam yuqorida turadi")
 
     class Meta:
@@ -26,7 +26,7 @@ class Project(Publishable):
     result = models.TextField("Natija")
     tech = models.JSONField("Texnologiyalar", default=list, blank=True, help_text='Ro\'yxat: ["React", "Django"]')
     cover = models.ImageField("Muqova rasmi", upload_to="projects/", blank=True)
-    featured = models.BooleanField("Bosh sahifada ko'rsatish", default=False)
+    featured = models.BooleanField("Bosh sahifada koʻrsatish", default=False)
     placeholder = models.BooleanField("Namuna matn", default=False)
 
     class Meta(Publishable.Meta):
@@ -50,7 +50,7 @@ class ProjectImage(models.Model):
 
 
 class Package(Publishable):
-    key = models.SlugField("Kalit", unique=True, help_text="start, pro, maktab_biznes (buyurtma formasi bilan mos bo'lishi kerak)")
+    key = models.SlugField("Kalit", unique=True, help_text="start, pro, maktab_biznes (buyurtma formasi bilan mos boʻlishi kerak)")
     name = models.CharField("Nomi", max_length=60)
     tagline = models.CharField("Qisqa izoh", max_length=120, blank=True)
     price_text = models.CharField("Narx (matn)", max_length=60, help_text="Masalan: 2 000 000 yoki Kelishiladi")
@@ -67,7 +67,7 @@ class Package(Publishable):
 
 class ComparisonRow(Publishable):
     label = models.CharField("Imkoniyat", max_length=120)
-    start = models.CharField("Start", max_length=30, blank=True, help_text="+ bor, - yo'q, yoki matn (masalan: 1 oy)")
+    start = models.CharField("Start", max_length=30, blank=True, help_text="+ bor, - yoʻq, yoki matn (masalan: 1 oy)")
     pro = models.CharField("Pro", max_length=30, blank=True)
     maktab_biznes = models.CharField("Maktab-Biznes", max_length=30, blank=True)
 
@@ -93,8 +93,8 @@ class AddOn(Publishable):
     price_text = models.CharField("Narx (matn)", max_length=60)
 
     class Meta(Publishable.Meta):
-        verbose_name = "Qo'shimcha xizmat"
-        verbose_name_plural = "Qo'shimcha xizmatlar"
+        verbose_name = "Qoʻshimcha xizmat"
+        verbose_name_plural = "Qoʻshimcha xizmatlar"
 
     def __str__(self):
         return self.name
@@ -136,7 +136,7 @@ class Post(models.Model):
     description = models.CharField("Qisqa tavsif (SEO)", max_length=300)
     body = models.TextField("Matn (markdown)")
     date = models.DateField("Sana")
-    published = models.BooleanField("Saytda ko'rsatish", default=True)
+    published = models.BooleanField("Saytda koʻrsatish", default=True)
 
     class Meta:
         ordering = ["-date", "-id"]

@@ -1,4 +1,4 @@
-"""Admin uchun API (token bilan): buyurtmalar ro'yxati va statusni o'zgartirish."""
+"""Admin uchun API (token bilan): buyurtmalar roʻyxati va statusni oʻzgartirish."""
 from rest_framework import mixins, serializers, viewsets
 from rest_framework.permissions import IsAdminUser
 

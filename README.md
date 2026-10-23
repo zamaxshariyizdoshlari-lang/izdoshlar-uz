@@ -55,7 +55,8 @@ Token **faqat serverda** turadi, frontendda yo'q. Telegram ishlamasa ham buyurtm
 
 - Yashirin honeypot maydon (`website`): to'ldirilsa, buyurtma saqlanmaydi.
 - Forma 3 soniyadan tez yuborilsa, saqlanmaydi (`ORDER_MIN_FILL_SECONDS`).
-- Throttle: IP bo'yicha soatiga 5 ta va daqiqasiga 2 ta (`ORDER_THROTTLE`, `ORDER_THROTTLE_BURST`).
+- Throttle: IP bo'yicha soatiga 15 ta va daqiqasiga 3 ta (`ORDER_THROTTLE`, `ORDER_THROTTLE_BURST`). Mobil operatorlar ko'p abonentni bitta IP ostiga qo'yadi, shuning uchun juda qattiq qilinmagan.
+- Forma yuborilishi uchun maxfiylik siyosatiga rozilik majburiy (server ham tekshiradi va rozilik vaqtini saqlaydi).
 - Nginx orqasida `NUM_PROXIES=1` qo'ying, aks holda barcha foydalanuvchilar bitta IP bo'lib ko'rinadi.
 - Qat'iy validatsiya: +998 telefon, Telegram username, URL, uzunlik chegaralari.
 
@@ -125,6 +126,36 @@ gunicorn config.wsgi:application --bind 127.0.0.1:8000 --workers 3
 - HTTPS: `certbot --nginx`.
 - Ishlab chiqarishda PostgreSQL: `DATABASE_URL=postgres://user:pass@localhost:5432/dbname`.
 - `DEBUG=0` bo'lganda `SECRET_KEY` majburiy, aks holda server ishga tushmaydi.
+
+## Bildirishnoma ishonchliligi
+
+Buyurtma avval bazaga yoziladi, keyin Telegram'ga yuboriladi. Telegram ishlamasa:
+
+1. `backend/.env` da `ORDER_NOTIFY_EMAIL` (va `EMAIL_*`) bo'lsa, xabar zaxira sifatida emailga ketadi.
+2. Hech biri ketmasa, buyurtma baribir saqlanadi va admin'da `notified_at` bo'sh turadi.
+3. `python manage.py retry_notifications` yuborilmaganlarini qayta urinadi (oxirgi 72 soat). Uni cron bilan har 10 daqiqada ishga tushiring: `deploy/crontab.example`.
+
+## Huquqiy hujjatlar
+
+`/maxfiylik` (Maxfiylik siyosati) va `/oferta` (Ommaviy oferta) sahifalari, footerdagi havolalar va forma yonidagi rozilik belgisi qo'shilgan. Matnlar: `frontend/src/i18n/legal.uz.ts`.
+
+> **Diqqat:** bu matnlar NAMUNA shablon, yurist emas yozgan. Saytni ochishdan oldin yurist ko'rigidan o'tkazing (ayniqsa saqlash muddati 12 oy, bepul qo'llab-quvvatlash muddatlari, javobgarlik va qaytarish bandlari). Rekvizitlarni `frontend/.env` ga yozing: `VITE_LEGAL_NAME`, `VITE_LEGAL_INN`, `VITE_LEGAL_ADDRESS`, `VITE_CONTACT_EMAIL`. Ular hujjatlar va footerga avtomatik qo'yiladi. Payme/Click merchant hisobi uchun ham oferta va rekvizitlar saytda bo'lishi talab qilinadi.
+
+## Deploy fayllari
+
+| Fayl | Nima uchun |
+|---|---|
+| `frontend/vercel.json` | Vercel: chiroyli URL'lar (`/narxlar`), xavfsizlik sarlavhalari, kesh, `/boshqaruv` uchun noindex |
+| `frontend/netlify.toml` | Netlify uchun xuddi shu (Base directory: `frontend`) |
+| `frontend/public/404.html` | Mavjud bo'lmagan manzillar uchun sahifa (JS'siz) |
+| `deploy/nginx-api.conf.example` | API uchun nginx (proksi, `/media/`, buyurtma endpointiga qo'shimcha cheklov) |
+| `deploy/izdoshlar.service` | gunicorn uchun systemd xizmati |
+| `deploy/backup.sh` | PostgreSQL va `media/` kundalik zaxirasi (14 kun saqlanadi) |
+| `deploy/crontab.example` | Bildirishnomani qayta urinish, zaxira, sessiyalarni tozalash |
+
+**Muhim:** statik hostingda `/narxlar` manzili `narxlar/index.html` ga yo'naltirilishi shart. Vercel va Netlify buni o'zi qiladi; nginx'da `try_files $uri $uri/index.html /404.html;` ishlating. Aks holda bosh sahifa chiqib qoladi (`vite preview` ham shunday qiladi, `/narxlar/` bilan tekshiring).
+
+Hali qilinmagan: frontend uchun CSP sarlavhasi (domen aniq bo'lgach qo'shiladi), CI, Dockerfile.
 
 ## Keyingi bosqichlar
 

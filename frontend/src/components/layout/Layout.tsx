@@ -2,7 +2,7 @@ import { Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { t } from '../../i18n'
-import { BRAND_NAME, CONTACT_PHONE, TELEGRAM_USERNAME } from '../../lib/config'
+import { BRAND_NAME, CONTACT_PHONE, LEGAL_ADDRESS, LEGAL_INN, LEGAL_NAME, TELEGRAM_USERNAME } from '../../lib/config'
 
 const links = [
   { to: '/loyihalar', label: t.nav.projects },
@@ -15,7 +15,7 @@ const links = [
 
 function Logo() {
   return (
-    <Link to="/" className="flex items-center gap-2 text-xl font-extrabold" aria-label={BRAND_NAME}>
+    <Link to="/" className="flex items-center gap-2 text-xl font-extrabold">
       <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-500 text-white" aria-hidden>
         {BRAND_NAME.charAt(0).toUpperCase()}
       </span>
@@ -88,7 +88,7 @@ function Footer() {
           <p className="mt-3 text-ink-700">{t.footer.tagline}</p>
         </div>
         <div>
-          <h3 className="mb-3 text-base">{t.footer.pages}</h3>
+          <h2 className="mb-3 text-base">{t.footer.pages}</h2>
           <ul className="space-y-2 text-ink-700">
             {links.map((l) => (
               <li key={l.to}>
@@ -100,7 +100,7 @@ function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="mb-3 text-base">{t.footer.contacts}</h3>
+          <h2 className="mb-3 text-base">{t.footer.contacts}</h2>
           <ul className="space-y-2 text-ink-700">
             <li>
               <Link className="hover:text-brand-700" to="/aloqa">
@@ -125,7 +125,20 @@ function Footer() {
         </div>
       </div>
       <div className="border-t border-line py-4 text-center text-sm text-ink-500">
+        <div className="container-page flex flex-col items-center gap-2">
+          <nav aria-label={t.footer.legalTitle} className="flex flex-wrap justify-center gap-x-5 gap-y-1">
+            <Link className="hover:text-brand-700" to="/maxfiylik">{t.footer.privacy}</Link>
+            <Link className="hover:text-brand-700" to="/oferta">{t.footer.offer}</Link>
+          </nav>
+          {(LEGAL_NAME || LEGAL_INN || LEGAL_ADDRESS) && (
+            <p>
+              {[LEGAL_NAME, LEGAL_INN && `STIR: ${LEGAL_INN}`, LEGAL_ADDRESS].filter(Boolean).join(' · ')}
+            </p>
+          )}
+          <p>
         © {new Date().getFullYear()} {BRAND_NAME}. {t.footer.rights}
+          </p>
+        </div>
       </div>
     </footer>
   )
@@ -140,7 +153,7 @@ export default function Layout() {
   return (
     <div className="flex min-h-screen flex-col">
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-white focus:px-4 focus:py-2">
-        Asosiy qismga o‘tish
+        Asosiy qismga oʻtish
       </a>
       <Header />
       <main id="main" className="flex-1">

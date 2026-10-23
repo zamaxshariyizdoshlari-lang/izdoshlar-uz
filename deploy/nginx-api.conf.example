@@ -1,0 +1,45 @@
+# /etc/nginx/sites-available/izdoshlar-api   (api.SIZNING-DOMEN.uz uchun)
+# Keyin: ln -s ... /etc/nginx/sites-enabled/ && nginx -t && systemctl reload nginx
+# HTTPS: certbot --nginx -d api.SIZNING-DOMEN.uz
+#
+# backend/.env da: NUM_PROXIES=1 (haqiqiy mijoz IP'si X-Forwarded-For orqali olinadi)
+
+# Buyurtma endpointiga qoʻshimcha, nginx darajasidagi cheklov (Django throttle'ga qoʻshimcha)
+limit_req_zone $binary_remote_addr zone=orders:10m rate=30r/m;
+
+upstream izdoshlar_backend {
+    server 127.0.0.1:8000;
+}
+
+server {
+    listen 80;
+    server_name api.SIZNING-DOMEN.uz;
+    # certbot bu blokni HTTPS'ga yoʻnaltirishga oʻzgartiradi
+
+    client_max_body_size 5m;
+
+    # Yuklangan rasmlar (admin orqali)
+    location /media/ {
+        alias /srv/izdoshlar/backend/media/;
+        expires 30d;
+        access_log off;
+    }
+
+    location = /api/v1/orders/ {
+        limit_req zone=orders burst=10 nodelay;
+        proxy_pass http://izdoshlar_backend;
+        include /etc/nginx/izdoshlar-proxy.conf;
+    }
+
+    location / {
+        proxy_pass http://izdoshlar_backend;
+        include /etc/nginx/izdoshlar-proxy.conf;
+    }
+}
+
+# /etc/nginx/izdoshlar-proxy.conf fayli mazmuni (alohida fayl sifatida saqlang):
+#   proxy_set_header Host $host;
+#   proxy_set_header X-Real-IP $remote_addr;
+#   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#   proxy_set_header X-Forwarded-Proto $scheme;
+#   proxy_read_timeout 30s;

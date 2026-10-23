@@ -1,9 +1,18 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/nunito';
 
+/* Nunito'dagi oʻ, gʻ va tutuq (U+02BB, U+02BC) belgilari juda keng boʻshliq bilan chiqadi.
+   Faqat shu ikki belgi uchun tizimdagi tor shrift ishlatiladi (topilmasa, Nunito qoladi). */
+@font-face {
+  font-family: 'Uz Apostrophe';
+  src: local('Arial'), local('Helvetica Neue'), local('Helvetica'), local('Roboto'), local('Segoe UI');
+  unicode-range: U+02BB-02BC;
+  font-weight: 100 900;
+}
+
 /* ============ Dizayn tizimi: tokenlar ============ */
 @theme {
-  --font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Uz Apostrophe', 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
 
   /* Asosiy (iliq to'q sariq) */
   --color-brand-50: #fff3ea;

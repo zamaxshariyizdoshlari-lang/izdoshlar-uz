@@ -37,7 +37,7 @@ export function PageHeader({ title, subtitle }: { title: string; subtitle?: stri
   )
 }
 
-// <details> ishlatilgan: JS talab qilmaydi, klaviatura va ekran o'quvchi bilan ishlaydi
+// <details> ishlatilgan: JS talab qilmaydi, klaviatura va ekran oʻquvchi bilan ishlaydi
 export function Accordion({ items }: { items: { q: string; a: string }[] }) {
   return (
     <div className="mx-auto max-w-3xl space-y-3">
@@ -62,7 +62,7 @@ export function CtaBand({ title, text, button, to = '/aloqa' }: { title: string;
           <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-brand-500/60" aria-hidden />
           <div className="pointer-events-none absolute -bottom-12 -left-8 h-40 w-40 rounded-full bg-sun-400/40" aria-hidden />
           <h2 className="relative mx-auto max-w-2xl text-3xl font-extrabold text-white sm:text-4xl">{title}</h2>
-          <p className="relative mx-auto mt-3 max-w-xl text-lg text-white/90">{text}</p>
+          <p className="relative mx-auto mt-3 max-w-xl text-lg text-white">{text}</p>
           <Link to={to} className="btn relative mt-7 bg-white text-brand-700 hover:-translate-y-0.5 hover:shadow-lift">
             {button}
           </Link>

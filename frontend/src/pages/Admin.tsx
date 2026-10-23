@@ -236,7 +236,7 @@ export function Component() {
   const [token, setToken] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
 
-  // Token faqat brauzerda o'qiladi (prerender vaqtida bo'sh sahifa chiqadi)
+  // Token faqat brauzerda oʻqiladi (prerender vaqtida boʻsh sahifa chiqadi)
   useEffect(() => {
     setToken(getToken())
     setReady(true)

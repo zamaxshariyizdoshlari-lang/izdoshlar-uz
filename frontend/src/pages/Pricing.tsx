@@ -69,7 +69,7 @@ export function Component() {
                         {v === true ? (
                           <Check className="mx-auto h-5 w-5 text-leaf-500" aria-label="Bor" />
                         ) : v === false ? (
-                          <Minus className="mx-auto h-5 w-5 text-ink-500/50" aria-label="Yo'q" />
+                          <Minus className="mx-auto h-5 w-5 text-ink-500/50" aria-label="Yoʻq" />
                         ) : (
                           <span className="font-semibold">{v}</span>
                         )}

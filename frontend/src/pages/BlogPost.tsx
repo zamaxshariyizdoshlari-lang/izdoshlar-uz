@@ -37,7 +37,7 @@ export function Component() {
           </Link>
           <time className="mt-6 block text-sm font-semibold text-ink-500" dateTime={post.date}>{formatDate(post.date)}</time>
           <h1 className="h1 mt-2 !text-4xl sm:!text-5xl">{post.title}</h1>
-          {/* Manba: repo ichidagi o'zimizning .md fayllar (tashqi kiritish yo'q) */}
+          {/* Manba: repo ichidagi oʻzimizning .md fayllar (tashqi kiritish yoʻq) */}
           <div className="prose-blog mt-8" dangerouslySetInnerHTML={{ __html: post.html }} />
         </div>
       </article>
