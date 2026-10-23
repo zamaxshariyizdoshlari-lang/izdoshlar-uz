@@ -1,5 +1,7 @@
 // Barcha interfeys matnlari shu yerda. Rus/Ingliz tillari uchun ru.ts / en.ts
 // xuddi shu tuzilmada qoʻshiladi va i18n/index.ts da tanlanadi.
+import { schoolsPage } from './schools.uz'
+
 export const uz = {
   nav: {
     home: 'Bosh sahifa',
@@ -8,6 +10,7 @@ export const uz = {
     pricing: 'Narxlar',
     products: 'Mahsulotlar',
     about: 'Haqimda',
+    schools: 'Maktablar',
     blog: 'Blog',
     contact: 'Aloqa',
     order: 'Buyurtma berish',
@@ -46,7 +49,7 @@ export const uz = {
           title: 'Maktab / oʻquv markazi',
           text: "Maktab ERP, avtomatik dars jadvali va AI yordamchi. Narxi maktab hajmiga qarab kelishiladi.",
           cta: "Demo soʻrash",
-          to: '/aloqa?tur=demo',
+          to: '/maktablar',
         },
         {
           key: 'business',
@@ -279,6 +282,13 @@ export const uz = {
   legal: {
     updated: 'Yangilangan',
   },
+  quick: {
+    telegram: 'Telegramda yozish',
+    call: 'Qoʻngʻiroq qilish',
+    orWrite: 'Yoki toʻgʻridan-toʻgʻri yozing',
+    afterSend: 'Tezroq javob kerakmi? Telegramda yozing:',
+  },
+  schools: schoolsPage,
   footer: {
     tagline: "Taʼlim va biznes uchun raqamli yechimlar.",
     pages: 'Sahifalar',

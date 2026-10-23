@@ -2,9 +2,12 @@ import { Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { t } from '../../i18n'
+import { FloatingContact } from './FloatingContact'
+import { QuickContact } from '../sections/QuickContact'
 import { BRAND_NAME, CONTACT_PHONE, LEGAL_ADDRESS, LEGAL_INN, LEGAL_NAME, TELEGRAM_USERNAME } from '../../lib/config'
 
 const links = [
+  { to: '/maktablar', label: t.nav.schools },
   { to: '/loyihalar', label: t.nav.projects },
   { to: '/xizmatlar', label: t.nav.services },
   { to: '/narxlar', label: t.nav.pricing },
@@ -12,6 +15,9 @@ const links = [
   { to: '/blog', label: t.nav.blog },
   { to: '/haqimda', label: t.nav.about },
 ]
+
+// Sarlavhada joy yetishi uchun "Haqimda" faqat mobil menyu va footerda
+const headerLinks = links.filter((l) => l.to !== '/haqimda')
 
 function Logo() {
   return (
@@ -34,7 +40,7 @@ function Header() {
       <div className="container-page flex h-16 items-center justify-between">
         <Logo />
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Asosiy menyu">
-          {links.map((l) => (
+          {headerLinks.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
@@ -72,6 +78,7 @@ function Header() {
             <Link to="/aloqa" className="btn btn-primary mt-2">
               {t.nav.order}
             </Link>
+            <QuickContact size="sm" className="mt-2" />
           </div>
         </nav>
       )}
@@ -160,6 +167,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <FloatingContact />
     </div>
   )
 }

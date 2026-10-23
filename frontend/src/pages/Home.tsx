@@ -2,6 +2,7 @@ import { ArrowRight, Briefcase, GraduationCap, School } from 'lucide-react'
 import { Link, useLoaderData } from 'react-router-dom'
 import { Accordion, ButtonLink, CtaBand, SectionHeading } from '../components/ui'
 import { Seo } from '../components/layout/Seo'
+import { HeroArt } from '../components/sections/HeroArt'
 import { ProjectCard } from '../components/sections/ProjectCard'
 import { t } from '../i18n'
 import { getFaq, getFeaturedProjects, getTestimonials, type FaqItem, type Project, type Testimonial } from '../lib/api'
@@ -27,8 +28,8 @@ export function Component() {
       <section className="relative overflow-hidden bg-gradient-to-b from-cream-100 to-cream-50">
         <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-sun-400/30 blur-2xl" aria-hidden />
         <div className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-leaf-100/70 blur-2xl" aria-hidden />
-        <div className="container-page relative py-16 sm:py-24">
-          <div className="max-w-3xl animate-fade-up">
+        <div className="container-page relative grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="animate-fade-up">
             <span className="badge badge-leaf">{h.hero.badge}</span>
             <h1 className="h1 mt-5">{h.hero.title}</h1>
             <p className="lead mt-5 max-w-2xl">{h.hero.text}</p>
@@ -37,6 +38,7 @@ export function Component() {
               <ButtonLink to="/loyihalar" variant="secondary">{h.hero.ctaSecondary}</ButtonLink>
             </div>
           </div>
+          <HeroArt className="mx-auto w-full max-w-sm sm:max-w-md lg:max-w-none" />
         </div>
       </section>
 

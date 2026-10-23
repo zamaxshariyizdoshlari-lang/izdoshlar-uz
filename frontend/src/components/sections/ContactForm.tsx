@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { t } from '../../i18n'
 import { submitOrder, type OrderPayload } from '../../lib/api'
+import { QuickContact } from './QuickContact'
 
 const c = t.contact
 const PHONE_RE = /^\+998\d{9}$/
@@ -136,6 +137,8 @@ export function ContactForm() {
         <CheckCircle2 className="mx-auto h-14 w-14 text-leaf-500" aria-hidden />
         <h2 className="mt-4 text-2xl">{c.successTitle}</h2>
         <p className="lead mt-2">{c.successText}</p>
+        <p className="mt-4 text-ink-700">{t.quick.afterSend}</p>
+        <QuickContact size="sm" className="mt-3 justify-center" />
         <button
           className="btn btn-secondary mt-6"
           onClick={() => {

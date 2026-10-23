@@ -8,6 +8,7 @@ export const routes: RouteRecord[] = [
     element: <Layout />,
     children: [
       { index: true, lazy: () => import('./pages/Home') },
+      { path: 'maktablar', lazy: () => import('./pages/Schools') },
       { path: 'loyihalar', lazy: () => import('./pages/Projects') },
       {
         path: 'loyihalar/:slug',
