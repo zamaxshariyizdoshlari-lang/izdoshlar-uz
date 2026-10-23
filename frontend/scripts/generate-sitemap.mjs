@@ -20,7 +20,8 @@ async function fromApi(path) {
   }
 }
 
-const pages = ['', '/maktablar', '/loyihalar', '/xizmatlar', '/narxlar', '/mahsulotlar', '/haqimda', '/blog', '/aloqa', '/maxfiylik', '/oferta']
+const business = process.env.VITE_ENABLE_BUSINESS === '1'
+const pages = ['', '/maktablar', '/loyihalar', '/xizmatlar', ...(business ? ['/narxlar'] : []), '/mahsulotlar', '/haqimda', '/blog', '/aloqa', '/maxfiylik', '/oferta']
 const lastmod = {}
 
 const projects = (await fromApi('/projects/')) ?? JSON.parse(readFileSync(join(root, 'src/data/projects.json'), 'utf8'))

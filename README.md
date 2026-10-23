@@ -127,6 +127,15 @@ gunicorn config.wsgi:application --bind 127.0.0.1:8000 --workers 3
 - Ishlab chiqarishda PostgreSQL: `DATABASE_URL=postgres://user:pass@localhost:5432/dbname`.
 - `DEBUG=0` bo'lganda `SECRET_KEY` majburiy, aks holda server ishga tushmaydi.
 
+## Biznes yo'nalishini yoqish/o'chirish
+
+Hozircha sayt faqat maktablar va o'qituvchilar uchun ochiq. Biznes yo'nalishi (sayt/bot/AI agent xizmatlari, Narxlar sahifasi va paketlar) `VITE_ENABLE_BUSINESS` bilan boshqariladi:
+
+- `0` yoki yo'q (standart): Narxlar sahifasi, menyudagi havola va sitemap yozuvi chiqmaydi; hero va bosh sahifa maktablarga qaratilgan; forma "Demo so'rovi" bilan ochiladi va paket tanlovi yo'q.
+- `1`: hammasi qaytadi. Frontendni qayta build qiling (Vercel/Netlify'da o'zgaruvchini qo'shib redeploy).
+
+Backend o'zgarmaydi, u har ikkala holatda ham barcha turdagi buyurtmalarni qabul qiladi. Eslatma: `/oferta` matnida paketlar tilga olingan, biznesni ochganda yoki ochmasdan oldin yurist bilan ko'rib chiqing.
+
 ## Bildirishnoma ishonchliligi
 
 Buyurtma avval bazaga yoziladi, keyin Telegram'ga yuboriladi. Telegram ishlamasa:

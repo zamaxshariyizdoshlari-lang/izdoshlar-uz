@@ -6,10 +6,12 @@ import { HeroArt } from '../components/sections/HeroArt'
 import { ProjectCard } from '../components/sections/ProjectCard'
 import { t } from '../i18n'
 import { getFaq, getFeaturedProjects, getTestimonials, type FaqItem, type Project, type Testimonial } from '../lib/api'
-import { BRAND_NAME, SITE_URL } from '../lib/config'
+import { BRAND_NAME, ENABLE_BUSINESS, SITE_URL } from '../lib/config'
 
 const audienceIcons = { school: School, business: Briefcase, teacher: GraduationCap }
 const h = t.home
+const hero = ENABLE_BUSINESS ? h.hero : h.heroSchools
+const audiences = h.audiences.items.filter((a) => ENABLE_BUSINESS || a.key !== 'business')
 
 export async function loader() {
   const [featured, testimonials, faq] = await Promise.all([getFeaturedProjects(), getTestimonials(), getFaq('home')])
@@ -30,12 +32,12 @@ export function Component() {
         <div className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-leaf-100/70 blur-2xl" aria-hidden />
         <div className="container-page relative grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="animate-fade-up">
-            <span className="badge badge-leaf">{h.hero.badge}</span>
-            <h1 className="h1 mt-5">{h.hero.title}</h1>
-            <p className="lead mt-5 max-w-2xl">{h.hero.text}</p>
+            <span className="badge badge-leaf">{hero.badge}</span>
+            <h1 className="h1 mt-5">{hero.title}</h1>
+            <p className="lead mt-5 max-w-2xl">{hero.text}</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink to="/aloqa">{h.hero.ctaPrimary}</ButtonLink>
-              <ButtonLink to="/loyihalar" variant="secondary">{h.hero.ctaSecondary}</ButtonLink>
+              <ButtonLink to={ENABLE_BUSINESS ? '/aloqa' : '/aloqa?tur=demo'}>{hero.ctaPrimary}</ButtonLink>
+              <ButtonLink to={ENABLE_BUSINESS ? '/loyihalar' : '/maktablar'} variant="secondary">{hero.ctaSecondary}</ButtonLink>
             </div>
           </div>
           <HeroArt className="mx-auto w-full max-w-sm sm:max-w-md lg:max-w-none" />
@@ -45,8 +47,8 @@ export function Component() {
       <section className="section">
         <div className="container-page">
           <SectionHeading title={h.audiences.title} subtitle={h.audiences.subtitle} />
-          <div className="grid gap-6 md:grid-cols-3">
-            {h.audiences.items.map((a) => {
+          <div className={`grid gap-6 ${ENABLE_BUSINESS ? 'md:grid-cols-3' : 'mx-auto max-w-4xl md:grid-cols-2'}`}>
+            {audiences.map((a) => {
               const Icon = audienceIcons[a.key as keyof typeof audienceIcons]
               return (
                 <Link key={a.key} to={a.to} className="card card-hover group flex flex-col">

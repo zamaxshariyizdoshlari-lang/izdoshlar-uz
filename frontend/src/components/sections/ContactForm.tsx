@@ -3,9 +3,14 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { t } from '../../i18n'
 import { submitOrder, type OrderPayload } from '../../lib/api'
+import { ENABLE_BUSINESS } from '../../lib/config'
 import { QuickContact } from './QuickContact'
 
 const c = t.contact
+const SCHOOL_SERVICES = ['erp', 'timetable', 'ai', 'content', 'other']
+const serviceOptions: Record<string, string> = ENABLE_BUSINESS
+  ? c.serviceOptions
+  : Object.fromEntries(Object.entries(c.serviceOptions).filter(([k]) => SCHOOL_SERVICES.includes(k)))
 const PHONE_RE = /^\+998\d{9}$/
 const TG_RE = /^@?[A-Za-z][A-Za-z0-9_]{4,31}$/
 
@@ -27,11 +32,11 @@ type FormState = {
 }
 
 const initial: FormState = {
-  kind: 'order',
+  kind: ENABLE_BUSINESS ? 'order' : 'demo',
   name: '',
   phone: '',
   telegram: '',
-  service_type: 'website',
+  service_type: ENABLE_BUSINESS ? 'website' : 'erp',
   package: 'custom',
   budget_range: 'unknown',
   description: '',
@@ -70,7 +75,7 @@ export function ContactForm() {
     setForm((f) => ({
       ...f,
       kind: q.get('tur') === 'demo' ? 'demo' : f.kind,
-      service_type: q.get('tur') === 'demo' ? 'erp' : q.get('xizmat') && q.get('xizmat')! in c.serviceOptions ? q.get('xizmat')! : f.service_type,
+      service_type: q.get('tur') === 'demo' ? 'erp' : q.get('xizmat') && q.get('xizmat')! in serviceOptions ? q.get('xizmat')! : f.service_type,
       package: q.get('paket') && q.get('paket')! in c.packageOptions ? q.get('paket')! : f.package,
     }))
   }, [search])
@@ -221,15 +226,17 @@ export function ContactForm() {
         </>
       ) : (
         <>
-          <div className="grid gap-5 sm:grid-cols-3">
+          <div className={`grid gap-5 ${ENABLE_BUSINESS ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
             <div>
               <label className="label" htmlFor="f-service_type">{c.serviceType}</label>
-              <Select id="f-service_type" value={form.service_type} onChange={set('service_type')} options={c.serviceOptions} />
+              <Select id="f-service_type" value={form.service_type} onChange={set('service_type')} options={serviceOptions} />
             </div>
-            <div>
-              <label className="label" htmlFor="f-package">{c.package}</label>
-              <Select id="f-package" value={form.package} onChange={set('package')} options={c.packageOptions} />
-            </div>
+            {ENABLE_BUSINESS && (
+              <div>
+                <label className="label" htmlFor="f-package">{c.package}</label>
+                <Select id="f-package" value={form.package} onChange={set('package')} options={c.packageOptions} />
+              </div>
+            )}
             <div>
               <label className="label" htmlFor="f-budget_range">{c.budget}</label>
               <Select id="f-budget_range" value={form.budget_range} onChange={set('budget_range')} options={c.budgetOptions} />

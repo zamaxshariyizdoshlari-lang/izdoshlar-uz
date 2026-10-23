@@ -1,6 +1,6 @@
 import { Head } from 'vite-react-ssg'
 import { t } from '../../i18n'
-import { BRAND_NAME, SITE_URL } from '../../lib/config'
+import { BRAND_NAME, ENABLE_BUSINESS, SITE_URL } from '../../lib/config'
 
 interface SeoProps {
   title?: string
@@ -10,8 +10,8 @@ interface SeoProps {
   jsonLd?: object
 }
 
-export function Seo({ title, description = t.seo.defaultDescription, path, type = 'website', jsonLd }: SeoProps) {
-  const fullTitle = title ? `${title} | ${BRAND_NAME}` : `${BRAND_NAME}: ${t.home.hero.badge}`
+export function Seo({ title, description = ENABLE_BUSINESS ? t.seo.defaultDescription : t.seo.defaultDescriptionSchools, path, type = 'website', jsonLd }: SeoProps) {
+  const fullTitle = title ? `${title} | ${BRAND_NAME}` : `${BRAND_NAME}: ${(ENABLE_BUSINESS ? t.home.hero : t.home.heroSchools).badge}`
   const url = `${SITE_URL}${path}`
   return (
     <Head>

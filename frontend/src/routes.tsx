@@ -1,6 +1,7 @@
 import type { RouteRecord } from 'vite-react-ssg'
 import Layout from './components/layout/Layout'
 import { getPosts, getProjects } from './lib/api'
+import { ENABLE_BUSINESS } from './lib/config'
 
 export const routes: RouteRecord[] = [
   {
@@ -16,7 +17,8 @@ export const routes: RouteRecord[] = [
         getStaticPaths: async () => (await getProjects()).map((p) => `loyihalar/${p.slug}`),
       },
       { path: 'xizmatlar', lazy: () => import('./pages/Services') },
-      { path: 'narxlar', lazy: () => import('./pages/Pricing') },
+      // Narxlar (biznes paketlari) faqat VITE_ENABLE_BUSINESS=1 boʻlganda mavjud
+      ...(ENABLE_BUSINESS ? [{ path: 'narxlar', lazy: () => import('./pages/Pricing') }] : []),
       { path: 'mahsulotlar', lazy: () => import('./pages/Products') },
       { path: 'haqimda', lazy: () => import('./pages/About') },
       { path: 'blog', lazy: () => import('./pages/Blog') },

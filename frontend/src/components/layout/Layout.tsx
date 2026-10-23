@@ -4,9 +4,12 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { t } from '../../i18n'
 import { FloatingContact } from './FloatingContact'
 import { QuickContact } from '../sections/QuickContact'
-import { BRAND_NAME, CONTACT_PHONE, LEGAL_ADDRESS, LEGAL_INN, LEGAL_NAME, TELEGRAM_USERNAME } from '../../lib/config'
+import { BRAND_NAME, ENABLE_BUSINESS, CONTACT_PHONE, LEGAL_ADDRESS, LEGAL_INN, LEGAL_NAME, TELEGRAM_USERNAME } from '../../lib/config'
 
-const links = [
+const ORDER_LABEL = ENABLE_BUSINESS ? t.nav.order : t.nav.demo
+const ORDER_TO = ENABLE_BUSINESS ? '/aloqa' : '/aloqa?tur=demo'
+
+const allLinks = [
   { to: '/maktablar', label: t.nav.schools },
   { to: '/loyihalar', label: t.nav.projects },
   { to: '/xizmatlar', label: t.nav.services },
@@ -15,6 +18,7 @@ const links = [
   { to: '/blog', label: t.nav.blog },
   { to: '/haqimda', label: t.nav.about },
 ]
+const links = allLinks.filter((l) => ENABLE_BUSINESS || l.to !== '/narxlar')
 
 // Sarlavhada joy yetishi uchun "Haqimda" faqat mobil menyu va footerda
 const headerLinks = links.filter((l) => l.to !== '/haqimda')
@@ -53,8 +57,8 @@ function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <Link to="/aloqa" className="btn btn-primary hidden !min-h-10 !px-5 !py-2 sm:inline-flex">
-            {t.nav.order}
+          <Link to={ORDER_TO} className="btn btn-primary hidden !min-h-10 !px-5 !py-2 sm:inline-flex">
+            {ORDER_LABEL}
           </Link>
           <button
             className="grid h-11 w-11 place-items-center rounded-full hover:bg-brand-50 lg:hidden"
@@ -75,8 +79,8 @@ function Header() {
                 {l.label}
               </NavLink>
             ))}
-            <Link to="/aloqa" className="btn btn-primary mt-2">
-              {t.nav.order}
+            <Link to={ORDER_TO} className="btn btn-primary mt-2">
+              {ORDER_LABEL}
             </Link>
             <QuickContact size="sm" className="mt-2" />
           </div>
@@ -110,8 +114,8 @@ function Footer() {
           <h2 className="mb-3 text-base">{t.footer.contacts}</h2>
           <ul className="space-y-2 text-ink-700">
             <li>
-              <Link className="hover:text-brand-700" to="/aloqa">
-                {t.nav.order}
+              <Link className="hover:text-brand-700" to={ORDER_TO}>
+                {ORDER_LABEL}
               </Link>
             </li>
             {TELEGRAM_USERNAME && (

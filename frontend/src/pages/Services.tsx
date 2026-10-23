@@ -2,17 +2,18 @@ import { Bot, Check, Globe, Presentation, School } from 'lucide-react'
 import { Seo } from '../components/layout/Seo'
 import { ButtonLink, PageHeader } from '../components/ui'
 import { t } from '../i18n'
+import { ENABLE_BUSINESS } from '../lib/config'
 
 const icons = { school: School, globe: Globe, bot: Bot, presentation: Presentation }
 
 export function Component() {
   return (
     <>
-      <Seo title={t.services.title} description={t.services.subtitle} path="/xizmatlar" />
-      <PageHeader title={t.services.title} subtitle={t.services.subtitle} />
+      <Seo title={t.services.title} description={ENABLE_BUSINESS ? t.services.subtitle : t.services.subtitleSchools} path="/xizmatlar" />
+      <PageHeader title={t.services.title} subtitle={ENABLE_BUSINESS ? t.services.subtitle : t.services.subtitleSchools} />
       <section className="section">
         <div className="container-page grid gap-6 md:grid-cols-2">
-          {t.services.items.map((s) => {
+          {t.services.items.filter((s) => ENABLE_BUSINESS || s.key === 'school' || s.key === 'content').map((s) => {
             const Icon = icons[s.icon as keyof typeof icons]
             return (
               <article key={s.key} id={s.key} className="card flex flex-col">

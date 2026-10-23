@@ -14,6 +14,7 @@ export const uz = {
     blog: 'Blog',
     contact: 'Aloqa',
     order: 'Buyurtma berish',
+    demo: 'Demo soʻrash',
     menu: 'Menyu',
   },
   common: {
@@ -29,10 +30,19 @@ export const uz = {
     toHome: 'Bosh sahifaga qaytish',
   },
   seo: {
+    defaultDescriptionSchools:
+      'Maktablar va oʻquv markazlari uchun boshqaruv tizimi (ERP), avtomatik dars jadvali va AI yordamchi, oʻqituvchilar uchun tayyor taqdimotlar. Oʻzbekistonda.',
     defaultDescription:
       "Maktablar uchun ERP va dars jadvali, biznes uchun sayt, Telegram bot va AI agentlar, oʻqituvchilar uchun tayyor taqdimotlar. Oʻzbekistonda.",
   },
   home: {
+    heroSchools: {
+      badge: 'Maktablar va oʻquv markazlari uchun',
+      title: 'Maktabingiz uchun ishonchli raqamli yechimlar',
+      text: 'Maktab ERP, avtomatik dars jadvali va AI yordamchi. Oddiy tilda tushuntiramiz, avval demo koʻrsatamiz.',
+      ctaPrimary: 'Demo soʻrash',
+      ctaSecondary: 'Imkoniyatlarni koʻrish',
+    },
     hero: {
       badge: "Taʼlim va biznes uchun raqamli yechimlar",
       title: "Maktabingiz va biznesingiz uchun ishonchli raqamli yechimlar",
@@ -109,6 +119,7 @@ export const uz = {
   services: {
     title: 'Xizmatlar',
     subtitle: "Toʻrt asosiy yoʻnalishda ishlaymiz",
+    subtitleSchools: 'Maktablar va oʻqituvchilar uchun',
     items: [
       {
         key: 'school',
