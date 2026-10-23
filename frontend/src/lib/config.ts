@@ -1,7 +1,12 @@
 // Bitta joyda: brend va aloqa maʼlumotlari. Qiymatlar .env orqali almashtiriladi.
 export const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || 'Izdoshlar'
 export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://[DOMAIN]').replace(/\/$/, '')
-export const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1').replace(/\/$/, '')
+// Ishlab chiqarishda manzil berilmasa API ishlatilmaydi (zaxira kontent), localhost faqat dev rejimda
+export const API_URL = (
+  import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? 'http://localhost:8000/api/v1' : '')
+).replace(/\/$/, '')
+// 1 boʻlsa sayt qidiruv tizimlariga yopiladi (sinov muhiti, namuna matnlar)
+export const NOINDEX = import.meta.env.VITE_NOINDEX === '1'
 export const TELEGRAM_USERNAME = import.meta.env.VITE_TELEGRAM_USERNAME || ''
 export const CONTACT_PHONE = import.meta.env.VITE_CONTACT_PHONE || ''
 // Biznes yoʻnalishi (sayt, bot, AI agent, paketlar va narxlar). Hozircha oʻchiq; yoqish uchun VITE_ENABLE_BUSINESS=1

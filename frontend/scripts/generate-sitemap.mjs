@@ -6,9 +6,10 @@ import { fileURLToPath } from 'node:url'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const site = (process.env.VITE_SITE_URL || 'https://[DOMAIN]').replace(/\/$/, '')
-const api = (process.env.VITE_API_URL || 'http://localhost:8000/api/v1').replace(/\/$/, '')
+const api = (process.env.VITE_API_URL ?? 'http://localhost:8000/api/v1').replace(/\/$/, '')
 
 async function fromApi(path) {
+  if (!api) return null
   try {
     const res = await fetch(`${api}${path}`, { signal: AbortSignal.timeout(8000) })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -45,5 +46,5 @@ ${pages.map((p) => `  <url><loc>${site}${p}</loc>${lastmod[p] ? `<lastmod>${last
 </urlset>
 `
 writeFileSync(join(root, 'dist/sitemap.xml'), xml)
-writeFileSync(join(root, 'dist/robots.txt'), `User-agent: *\nAllow: /\nDisallow: /boshqaruv\n\nSitemap: ${site}/sitemap.xml\n`)
+writeFileSync(join(root, 'dist/robots.txt'), `User-agent: *\n${process.env.VITE_NOINDEX === '1' ? 'Disallow: /' : 'Allow: /\nDisallow: /boshqaruv'}\n\nSitemap: ${site}/sitemap.xml\n`)
 console.log(`sitemap.xml: ${pages.length} ta sahifa`)

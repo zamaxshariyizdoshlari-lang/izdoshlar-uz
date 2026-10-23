@@ -1,6 +1,6 @@
 import { Head } from 'vite-react-ssg'
 import { t } from '../../i18n'
-import { BRAND_NAME, ENABLE_BUSINESS, SITE_URL } from '../../lib/config'
+import { BRAND_NAME, ENABLE_BUSINESS, NOINDEX, SITE_URL } from '../../lib/config'
 
 interface SeoProps {
   title?: string
@@ -17,6 +17,7 @@ export function Seo({ title, description = ENABLE_BUSINESS ? t.seo.defaultDescri
     <Head>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
+      {NOINDEX && <meta name="robots" content="noindex, nofollow" />}
       <link rel="canonical" href={url} />
       <meta property="og:type" content={type} />
       <meta property="og:title" content={fullTitle} />

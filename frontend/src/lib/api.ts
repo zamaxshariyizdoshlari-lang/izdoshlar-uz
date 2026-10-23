@@ -75,6 +75,7 @@ async function request<T>(path: string): Promise<T> {
 const buildCache = new Map<string, Promise<unknown>>()
 
 async function fetchApi<T>(path: string, fallback: () => T): Promise<T> {
+  if (!API_URL) return fallback()
   try {
     if (typeof window !== 'undefined') return await request<T>(path)
     if (!buildCache.has(path)) buildCache.set(path, request<T>(path))
@@ -139,6 +140,7 @@ export type SubmitResult =
   | { ok: false; reason: 'rate_limit' | 'network' | 'server' }
 
 export async function submitOrder(payload: OrderPayload): Promise<SubmitResult> {
+  if (!API_URL) return { ok: false, reason: 'network' }
   try {
     const res = await fetch(`${API_URL}/orders/`, {
       method: 'POST',

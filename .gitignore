@@ -12,3 +12,6 @@ staticfiles/
 .claude/
 media/
 backend/media/
+
+# Local Netlify folder
+.netlify

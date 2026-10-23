@@ -127,6 +127,22 @@ gunicorn config.wsgi:application --bind 127.0.0.1:8000 --workers 3
 - Ishlab chiqarishda PostgreSQL: `DATABASE_URL=postgres://user:pass@localhost:5432/dbname`.
 - `DEBUG=0` bo'lganda `SECRET_KEY` majburiy, aks holda server ishga tushmaydi.
 
+## Netlify'ga qo'lda deploy (CLI)
+
+Sinov sayti: https://izdoshlar-uz.netlify.app (qidiruv tizimlariga yopiq, `VITE_NOINDEX=1`).
+
+**Muhim:** lokal `frontend/.env` da sinov qiymatlari bor (`localhost` API, namuna Telegram/telefon). `netlify deploy` o'zi qayta build qiladi va `.env` ni o'qiydi, shuning uchun u qiymatlar ommaviy saytga tushib ketishi mumkin. Xavfsiz tartib:
+
+```bash
+cd frontend
+mv .env .env.bak
+VITE_API_URL= VITE_NOINDEX=1 VITE_ENABLE_BUSINESS=0 VITE_SITE_URL=https://izdoshlar-uz.netlify.app npm run build
+mv .env.bak .env
+npx netlify-cli deploy --prod --no-build --dir=dist
+```
+
+Ishlab chiqarishda `VITE_API_URL` berilmasa, sayt API'ga murojaat qilmaydi va zaxira kontentdan foydalanadi (buyurtma formasi esa backend bo'lmaguncha xato beradi). Doimiy yechim: Netlify'da GitHub repo'ni ulab (Base directory: `frontend`), o'zgaruvchilarni Site settings → Environment variables ga yozish; shunda har `git push` o'zi build qilinadi va lokal `.env` ishtirok etmaydi.
+
 ## Biznes yo'nalishini yoqish/o'chirish
 
 Hozircha sayt faqat maktablar va o'qituvchilar uchun ochiq. Biznes yo'nalishi (sayt/bot/AI agent xizmatlari, Narxlar sahifasi va paketlar) `VITE_ENABLE_BUSINESS` bilan boshqariladi:
