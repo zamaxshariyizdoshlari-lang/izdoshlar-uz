@@ -7,6 +7,42 @@ frontend/   React sayt (build vaqtida statik HTML ga prerender qilinadi)
 backend/    Django API: buyurtma qabul qilish + Telegram xabari
 ```
 
+## Arxitektura (hozirgi): Supabase + Netlify
+
+```
+frontend/   React sayt (Netlify'da statik, build vaqtida prerender)
+supabase/   Baza sxemasi (migrations/), namuna kontent (seed.sql), Edge Function (functions/submit-order)
+backend/    ESKI Django backend (Supabase'ga ko'chirilgan; sinovdan keyin o'chiriladi)
+```
+
+- **Ochiq kontent** (loyiha, paket, FAQ, blog, mahsulot) Supabase jadvallaridan o'qiladi. Brauzer faqat "saytda ko'rsatish" belgilanganlarini ko'ra oladi (RLS).
+- **Buyurtma formasi** -> Edge Function `submit-order`: tekshiruv, honeypot, tezlik cheklovi (soatiga 15, daqiqasiga 3), bazaga yozish, Telegram xabari. Brauzer `orders` jadvaliga to'g'ridan-to'g'ri yoza olmaydi.
+- **`/boshqaruv`**: Supabase Auth (email + parol). Faqat `admins` jadvalidagi foydalanuvchilar kira oladi. Admin buyurtmaning faqat statusi va izohini o'zgartira oladi (bazadagi trigger majburlaydi), har bir status o'zgarishi tarixga yoziladi. Mahsulotlarni qo'shish/tahrirlash/o'chirish va rasm yuklash (Storage `media` bucket, 5 MB, PNG/JPG/WebP).
+- **Boshqa kontent** (loyihalar, fikrlar, FAQ, blog, paketlar) hozircha Supabase dashboard -> Table Editor orqali tahrirlanadi.
+
+### Supabase'ni sozlash
+
+1. Loyiha yarating, `supabase/migrations/*.sql` va `supabase/seed.sql` ni SQL Editor'da ishga tushiring (yoki Supabase CLI: `supabase db push`).
+2. `supabase/functions/submit-order` ni deploy qiling (`supabase functions deploy submit-order --no-verify-jwt`).
+3. **Admin foydalanuvchi:** Dashboard -> Authentication -> Add user (email va parol, "Auto confirm" yoqing). So'ng SQL Editor'da:
+   ```sql
+   insert into public.admins (user_id) select id from auth.users where email = 'sizning@emailingiz';
+   ```
+4. **Telegram:** Dashboard -> Edge Functions -> Secrets: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`. (Bo'sh bo'lsa buyurtma baribir saqlanadi, `notify_error` da "Telegram sozlanmagan" yoziladi.)
+5. **Ruxsat etilgan domenlar (CORS):** Edge Function secret `ALLOWED_ORIGINS` (vergul bilan). Standart: `https://izdoshlar-uz.netlify.app,http://localhost:5173`. Haqiqiy domen qo'shilganda yangilang.
+6. Frontend `.env` / Netlify o'zgaruvchilari: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (publishable kalit; brauzerda bo'lishi mo'ljallangan). **Hech qachon `service_role` kalitni frontendga qo'ymang.**
+7. Production'da `VITE_REQUIRE_API=1`: Supabase javob bermasa build to'xtaydi va eski kontent chiqib ketmaydi.
+
+### Testlar
+
+```bash
+node --test supabase/tests/submit-order.test.ts   # buyurtma tekshiruvi va Telegram matni (18 ta)
+```
+
+Bazaning xavfsizlik qoidalari (anon nimani o'qiy/yoza oladi, admin chegaralari) Supabase'da haqiqiy so'rovlar bilan tekshirilgan: README oxiridagi "Xavfsizlik tekshiruvi" ro'yxatiga qarang.
+
+> Pastdagi Django (`backend/`) bo'limlari eski arxitektura uchun. Supabase'ga to'liq o'tilgach o'chiriladi.
+
 ## Lokal ishga tushirish
 
 **Backend** (Python 3.12+):
@@ -199,3 +235,10 @@ Hali qilinmagan: frontend uchun CSP sarlavhasi (domen aniq bo'lgach qo'shiladi),
 
 2. ✅ Bajarildi.
 3. Mahsulotlar, buyurtmalar va to'lovlar (Click / Payme / Uzum), feature flag ortida.
+
+## Xavfsizlik tekshiruvi (Supabase, haqiqiy so'rovlar bilan)
+
+- Anon kalit bilan: faqat "ko'rsatilgan" kontent o'qiladi; yashirin yozuvlar, `orders`, `admins`, `rate_limits` yopiq; `orders`, `products` ga yozish va Storage'ga yuklash rad etiladi; `hit_rate_limit` va `am_i_admin` funksiyalari chaqirilmaydi.
+- Edge Function: noto'g'ri ma'lumot 400, honeypot va juda tez yuborilgan so'rov jim qabul qilinib saqlanmaydi, tezlik cheklovi 429, CORS faqat ruxsat etilgan domenlarga.
+- Oddiy (admin bo'lmagan) foydalanuvchi `/boshqaruv` ga kira olmaydi. Admin `name`/`phone` kabi maydonlarni o'zgartira olmaydi (403), buyurtma yarata va o'chira olmaydi, noto'g'ri statusni qo'ya olmaydi.
+- Supabase xavfsizlik tekshiruvi (advisors): faqat `admins` va `rate_limits` "siyosatsiz" ko'rsatildi. Bu ataylab: ikkalasi hamma uchun yopiq.

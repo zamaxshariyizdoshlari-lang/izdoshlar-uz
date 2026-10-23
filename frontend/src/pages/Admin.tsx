@@ -6,6 +6,7 @@ import { t } from '../i18n'
 import {
   ApiError,
   clearToken,
+  ensureFreshToken,
   fetchOrders,
   getToken,
   login,
@@ -46,7 +47,7 @@ function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
     try {
       onLogin(await login(user.trim(), pass, remember))
     } catch (err) {
-      setError(err instanceof ApiError && err.status === 429 ? a.tooMany : a.badLogin)
+      setError(err instanceof ApiError && err.status === 429 ? a.tooMany : err instanceof ApiError && err.status === 403 ? a.forbidden : a.badLogin)
     } finally {
       setBusy(false)
     }
@@ -57,7 +58,7 @@ function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
       <h1 className="text-2xl">{a.loginTitle}</h1>
       <div>
         <label className="label" htmlFor="a-user">{a.username}</label>
-        <input id="a-user" className="field" value={user} onChange={(e) => setUser(e.target.value)} autoComplete="username" autoCapitalize="none" required />
+        <input id="a-user" type="email" className="field" value={user} onChange={(e) => setUser(e.target.value)} autoComplete="username" autoCapitalize="none" required />
       </div>
       <div>
         <label className="label" htmlFor="a-pass">{a.password}</label>
@@ -272,6 +273,24 @@ export function Component() {
     },
     [token],
   )
+
+  // Token muddati tugamasdan yangilab turadi (Supabase tokeni taxminan 1 soat yashaydi)
+  useEffect(() => {
+    if (!token) return
+    let stop = false
+    const tick = async () => {
+      const fresh = await ensureFreshToken()
+      if (stop) return
+      if (!fresh) handleLogout(true)
+      else if (fresh !== token) setToken(fresh)
+    }
+    tick()
+    const id = setInterval(tick, 60_000)
+    return () => {
+      stop = true
+      clearInterval(id)
+    }
+  }, [token, handleLogout])
 
   return (
     <section className="section">

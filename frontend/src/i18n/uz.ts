@@ -267,7 +267,7 @@ export const uz = {
   admin: {
     title: 'Boshqaruv',
     loginTitle: 'Boshqaruvga kirish',
-    username: 'Login',
+    username: 'Email',
     password: 'Parol',
     remember: 'Bu qurilmada eslab qolish',
     login: 'Kirish',

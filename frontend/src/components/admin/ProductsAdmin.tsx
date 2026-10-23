@@ -3,10 +3,10 @@ import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNod
 import { t } from '../../i18n'
 import {
   ApiError,
-  createProduct,
   deleteProduct,
   fetchProducts,
-  updateProduct,
+  saveProduct,
+  setProductPublished,
   type AdminProduct,
 } from '../../lib/adminApi'
 
@@ -30,9 +30,10 @@ function toForm(x: AdminProduct): FormState {
 
 /** Server xatosini (400) maydonlar boʻyicha ajratadi. */
 function fieldErrors(err: unknown): Record<string, string> {
-  if (err instanceof ApiError && err.status === 400 && err.body && typeof err.body === 'object') {
-    return Object.fromEntries(Object.entries(err.body as Record<string, unknown>).map(([k, v]) => [k, Array.isArray(v) ? String(v[0]) : String(v)]))
-  }
+  if (err instanceof ApiError && err.status === 415) return { cover: p.coverHint }
+  const msg = err instanceof ApiError && err.body && typeof err.body === 'object' ? String((err.body as { message?: string }).message ?? '') : ''
+  if (msg.includes('products_title_check')) return { title: p.errTitle }
+  if (msg.toLowerCase().includes('size') || msg.toLowerCase().includes('exceeded')) return { cover: p.coverHint }
   return { _: a.saveError }
 }
 
@@ -70,17 +71,19 @@ function ProductForm({
     if (form.title.trim().length < 2) return setErrors({ title: p.errTitle })
     setBusy(true)
     setErrors({})
-    const body = new FormData()
-    body.append('title', form.title.trim())
-    body.append('description', form.description.trim())
-    body.append('category', form.category)
-    body.append('price', form.price.trim())
-    body.append('published', String(form.published))
-    body.append('order', form.order || '0')
-    if (file) body.append('cover', file)
-    if (removeCover && !file) body.append('remove_cover', 'true')
     try {
-      onDone(product ? await updateProduct(token, product.id, body) : await createProduct(token, body))
+      onDone(
+        await saveProduct(token, product, {
+          title: form.title.trim(),
+          description: form.description.trim(),
+          category: form.category,
+          price: form.price.trim(),
+          published: form.published,
+          order: Number(form.order) || 0,
+          file,
+          removeCover: removeCover && !file,
+        }),
+      )
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) return onExpired()
       setErrors(fieldErrors(err))
@@ -204,7 +207,7 @@ export function ProductsAdmin({ token, onLogout, tabs }: { token: string; onLogo
 
   async function toggle(x: AdminProduct) {
     try {
-      const saved = await updateProduct(token, x.id, JSON.stringify({ published: !x.published }))
+      const saved = await setProductPublished(token, x.id, !x.published)
       setItems((prev) => prev?.map((i) => (i.id === saved.id ? saved : i)) ?? prev)
     } catch {
       setNotice(a.saveError)
@@ -214,7 +217,7 @@ export function ProductsAdmin({ token, onLogout, tabs }: { token: string; onLogo
   async function remove(x: AdminProduct) {
     if (!window.confirm(`${p.confirmDelete}\n\n«${x.title}»`)) return
     try {
-      await deleteProduct(token, x.id)
+      await deleteProduct(token, x)
       setItems((prev) => prev?.filter((i) => i.id !== x.id) ?? prev)
       setNotice(p.deleted)
     } catch {

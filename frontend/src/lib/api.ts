@@ -1,12 +1,12 @@
-// Maʼlumot qatlami. Kontent Django REST APIʼdan olinadi (build vaqtida prerender uchun,
-// brauzerda sahifalar orasida oʻtishda yangilanadi). API javob bermasa, repo ichidagi
-// data/*.json va content/blog/*.md fayllari zaxira sifatida ishlatiladi.
+// Ochiq maʼlumot qatlami. Kontent Supabase (PostgREST) dan olinadi: build vaqtida prerender uchun,
+// brauzerda sahifalar orasida oʻtishda yangilanadi. Supabase sozlanmagan yoki javob bermasa,
+// repo ichidagi data/*.json va content/blog/*.md zaxira sifatida ishlatiladi.
 import packagesData from '../data/packages.json'
 import faqData from '../data/faq.json'
 import projectsData from '../data/projects.json'
 import testimonialsData from '../data/testimonials.json'
 import { localPosts, toPost, type ApiPost, type Post } from './blog'
-import { API_URL } from './config'
+import { HAS_BACKEND, SUPABASE_URL, supabaseHeaders } from './config'
 
 export interface Project {
   slug: string
@@ -63,12 +63,14 @@ export interface PricingData {
   addons: AddOn[]
 }
 
-/** APIʼdan oʻqiydi. Xato boʻlsa zaxira qiymatni qaytaradi (VITE_REQUIRE_API=1 boʻlsa build toʻxtaydi). */
 async function request<T>(path: string): Promise<T> {
   let lastErr: unknown
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const res = await fetch(`${API_URL}${path}`, { signal: AbortSignal.timeout(8000) })
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+        headers: supabaseHeaders(),
+        signal: AbortSignal.timeout(8000),
+      })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       return (await res.json()) as T
     } catch (err) {
@@ -79,15 +81,16 @@ async function request<T>(path: string): Promise<T> {
   throw lastErr
 }
 
-// Build (Node) vaqtida har bir manzil bir marta soʻraladi; brauzerda har safar yangi maʼlumot olinadi
+// Build (Node) vaqtida har bir soʻrov bir marta bajariladi; brauzerda har safar yangi maʼlumot olinadi
 const buildCache = new Map<string, Promise<unknown>>()
 
-async function fetchApi<T>(path: string, fallback: () => T): Promise<T> {
-  if (!API_URL) return fallback()
+/** Supabase'dan oʻqiydi, `map` bilan frontend shakliga oʻtkazadi. Xato boʻlsa zaxira (VITE_REQUIRE_API=1 boʻlsa build toʻxtaydi). */
+async function fetchRows<Row, T>(path: string, map: (rows: Row[]) => T, fallback: () => T): Promise<T> {
+  if (!HAS_BACKEND) return fallback()
   try {
-    if (typeof window !== 'undefined') return await request<T>(path)
-    if (!buildCache.has(path)) buildCache.set(path, request<T>(path))
-    return (await buildCache.get(path)) as T
+    if (typeof window !== 'undefined') return map(await request<Row[]>(path))
+    if (!buildCache.has(path)) buildCache.set(path, request<Row[]>(path))
+    return map((await buildCache.get(path)) as Row[])
   } catch (err) {
     if (import.meta.env.VITE_REQUIRE_API === '1') throw err
     console.warn(`[api] ${path} olinmadi, zaxira kontent ishlatildi:`, (err as Error).message)
@@ -95,34 +98,78 @@ async function fetchApi<T>(path: string, fallback: () => T): Promise<T> {
   }
 }
 
-export const getProjects = () => fetchApi<Project[]>('/projects/', () => projectsData as Project[])
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Row = Record<string, any>
+const ORDER = 'order=sort_order.asc,id.asc'
+
+export const getProjects = () =>
+  fetchRows<Row, Project[]>(
+    `projects?select=slug,title,category,summary,problem,solution,result,tech,cover_url,screenshots,featured,placeholder&published=eq.true&${ORDER}`,
+    (rows) => rows.map(({ cover_url, ...r }) => ({ ...r, cover: cover_url || undefined }) as Project),
+    () => projectsData as Project[],
+  )
 export const getFeaturedProjects = async () => (await getProjects()).filter((p) => p.featured)
 export async function getProject(slug: string) {
   return (await getProjects()).find((p) => p.slug === slug) ?? null
 }
+
 export const getPricing = async (): Promise<PricingData> => {
   const [packages, comparison, addons] = await Promise.all([
-    fetchApi<Pkg[]>('/packages/', () => packagesData.packages as Pkg[]),
-    fetchApi<ComparisonRow[]>('/comparison/', () => packagesData.comparison as ComparisonRow[]),
-    fetchApi<AddOn[]>('/addons/', () => packagesData.addons),
+    fetchRows<Row, Pkg[]>(
+      `packages?select=key,name,tagline,price_text,popular,features&published=eq.true&${ORDER}`,
+      (rows) => rows.map(({ price_text, ...r }) => ({ ...r, price: price_text }) as Pkg),
+      () => packagesData.packages as Pkg[],
+    ),
+    fetchRows<Row, ComparisonRow[]>(
+      `comparison_rows?select=label,values&published=eq.true&${ORDER}`,
+      (rows) => rows as ComparisonRow[],
+      () => packagesData.comparison as ComparisonRow[],
+    ),
+    fetchRows<Row, AddOn[]>(
+      `addons?select=name,text,price_text&published=eq.true&${ORDER}`,
+      (rows) => rows.map(({ price_text, ...r }) => ({ ...r, price: price_text }) as AddOn),
+      () => packagesData.addons,
+    ),
   ])
   return { packages, comparison, addons }
 }
+
 export const getFaq = (scope: string) =>
-  fetchApi<FaqItem[]>(`/faq/?scope=${scope}`, () => (faqData as FaqItem[]).filter((f) => f.scope === scope))
-export const getProducts = () => fetchApi<Product[]>('/products/', () => [])
+  fetchRows<Row, FaqItem[]>(
+    `faq?select=scope,question,answer&scope=eq.${encodeURIComponent(scope)}&published=eq.true&${ORDER}`,
+    (rows) => rows.map((r) => ({ scope: r.scope, q: r.question, a: r.answer })),
+    () => (faqData as FaqItem[]).filter((f) => f.scope === scope),
+  )
+
 export const getTestimonials = () =>
-  fetchApi<Testimonial[]>('/testimonials/', () => testimonialsData.filter((t) => !('placeholder' in t && t.placeholder)))
+  fetchRows<Row, Testimonial[]>(
+    `testimonials?select=author,role,text&published=eq.true&${ORDER}`,
+    (rows) => rows as Testimonial[],
+    () => testimonialsData.filter((t) => !('placeholder' in t && t.placeholder)),
+  )
+
+export const getProducts = () =>
+  fetchRows<Row, Product[]>(
+    `products?select=slug,title,description,category,price_text,cover_url&published=eq.true&${ORDER}`,
+    (rows) =>
+      rows.map((r) => ({ slug: r.slug, title: r.title, description: r.description, category: r.category, price: r.price_text, cover: r.cover_url })),
+    () => [],
+  )
 
 export async function getPosts(): Promise<Post[]> {
-  const posts = await fetchApi<ApiPost[] | null>('/posts/', () => null)
+  if (!HAS_BACKEND) return localPosts
+  const posts = await fetchRows<Row, ApiPost[] | null>(
+    'posts?select=slug,title,description,body,date&published=eq.true&order=date.desc,id.desc',
+    (rows) => rows as ApiPost[],
+    () => null,
+  )
   return posts ? posts.map(toPost) : localPosts
 }
 export async function getPost(slug: string) {
   return (await getPosts()).find((p) => p.slug === slug) ?? null
 }
 
-// ---------- Buyurtma yuborish ----------
+// ---------- Buyurtma yuborish (Edge Function) ----------
 export interface OrderPayload {
   kind: 'order' | 'demo'
   name: string
@@ -149,20 +196,18 @@ export type SubmitResult =
   | { ok: false; reason: 'rate_limit' | 'network' | 'server' }
 
 export async function submitOrder(payload: OrderPayload): Promise<SubmitResult> {
-  if (!API_URL) return { ok: false, reason: 'network' }
+  if (!HAS_BACKEND) return { ok: false, reason: 'network' }
   try {
-    const res = await fetch(`${API_URL}/orders/`, {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/submit-order`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { ...supabaseHeaders(), 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     })
     if (res.ok) return { ok: true }
     if (res.status === 429) return { ok: false, reason: 'rate_limit' }
     if (res.status === 400) {
-      const body = await res.json().catch(() => ({}))
-      const fields: Record<string, string> = {}
-      for (const [k, v] of Object.entries(body)) fields[k] = Array.isArray(v) ? String(v[0]) : String(v)
-      return { ok: false, reason: 'validation', fields }
+      const body = (await res.json().catch(() => ({}))) as { errors?: Record<string, string> }
+      return { ok: false, reason: 'validation', fields: body.errors ?? {} }
     }
     return { ok: false, reason: 'server' }
   } catch {

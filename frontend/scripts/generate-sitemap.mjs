@@ -6,12 +6,16 @@ import { fileURLToPath } from 'node:url'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const site = (process.env.VITE_SITE_URL || 'https://[DOMAIN]').replace(/\/$/, '')
-const api = (process.env.VITE_API_URL ?? 'http://localhost:8000/api/v1').replace(/\/$/, '')
+const supaUrl = (process.env.VITE_SUPABASE_URL ?? '').replace(/\/$/, '')
+const supaKey = process.env.VITE_SUPABASE_ANON_KEY ?? ''
 
 async function fromApi(path) {
-  if (!api) return null
+  if (!supaUrl || !supaKey) return null
   try {
-    const res = await fetch(`${api}${path}`, { signal: AbortSignal.timeout(8000) })
+    const res = await fetch(`${supaUrl}/rest/v1/${path}`, {
+      headers: { apikey: supaKey, ...(supaKey.startsWith('eyJ') ? { Authorization: `Bearer ${supaKey}` } : {}) },
+      signal: AbortSignal.timeout(8000),
+    })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     return await res.json()
   } catch (err) {
@@ -25,10 +29,10 @@ const business = process.env.VITE_ENABLE_BUSINESS === '1'
 const pages = ['', '/maktablar', '/loyihalar', '/xizmatlar', ...(business ? ['/narxlar'] : []), '/mahsulotlar', '/haqimda', '/blog', '/aloqa', '/maxfiylik', '/oferta']
 const lastmod = {}
 
-const projects = (await fromApi('/projects/')) ?? JSON.parse(readFileSync(join(root, 'src/data/projects.json'), 'utf8'))
+const projects = (await fromApi('projects?select=slug&published=eq.true')) ?? JSON.parse(readFileSync(join(root, 'src/data/projects.json'), 'utf8'))
 projects.forEach((p) => pages.push(`/loyihalar/${p.slug}`))
 
-let posts = await fromApi('/posts/')
+let posts = await fromApi('posts?select=slug,date&published=eq.true')
 if (!posts) {
   const dir = join(root, 'src/content/blog')
   posts = readdirSync(dir)
