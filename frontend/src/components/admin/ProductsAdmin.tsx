@@ -1,5 +1,5 @@
-import { Eye, EyeOff, ImagePlus, LogOut, Pencil, Plus, RefreshCw, Trash2, X } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { Eye, EyeOff, ImagePlus, Pencil, Plus, RefreshCw, Trash2, X } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { t } from '../../i18n'
 import {
   ApiError,
@@ -181,7 +181,7 @@ function ProductForm({
   )
 }
 
-export function ProductsAdmin({ token, onLogout, tabs }: { token: string; onLogout: (expired?: boolean) => void; tabs: ReactNode }) {
+export function ProductsAdmin({ token, onLogout }: { token: string; onLogout: (expired?: boolean) => void }) {
   const [items, setItems] = useState<AdminProduct[] | null>(null)
   const [editing, setEditing] = useState<AdminProduct | 'new' | null>(null)
   const [error, setError] = useState('')
@@ -228,17 +228,11 @@ export function ProductsAdmin({ token, onLogout, tabs }: { token: string; onLogo
   return (
     <>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-3xl">{a.title}</h1>
-        <div className="flex gap-2">
-          <button className="btn btn-secondary !min-h-10 !px-4 !py-2" onClick={load} disabled={loading}>
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} aria-hidden /> {a.refresh}
-          </button>
-          <button className="btn btn-ghost !min-h-10 !px-4 !py-2" onClick={() => onLogout()}>
-            <LogOut className="h-4 w-4" aria-hidden /> {a.logout}
-          </button>
-        </div>
+        <h1 className="text-2xl font-extrabold text-slate-900">Mahsulotlar</h1>
+        <button className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" onClick={load} disabled={loading}>
+          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} aria-hidden /> {a.refresh}
+        </button>
       </div>
-      {tabs}
 
       {editing ? (
         <ProductForm

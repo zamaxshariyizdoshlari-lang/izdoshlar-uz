@@ -68,6 +68,16 @@ export function Component() {
         </div>
       </section>
 
+      <section className="section pt-0">
+        <div className="container-page">
+          <div className="relative overflow-hidden rounded-[2rem] bg-leaf-50 px-6 py-10 text-center sm:px-12">
+            <h2 className="h2 mx-auto max-w-2xl">{h.diagnosis.title}</h2>
+            <p className="lead mx-auto mt-3 max-w-xl">{h.diagnosis.text}</p>
+            <ButtonLink to="/tahlil" className="mt-6">{h.diagnosis.button}</ButtonLink>
+          </div>
+        </div>
+      </section>
+
       <section className="section bg-cream-100">
         <div className="container-page">
           <SectionHeading title={h.featured.title} subtitle={h.featured.subtitle} />

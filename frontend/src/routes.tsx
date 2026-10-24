@@ -27,11 +27,12 @@ export const routes: RouteRecord[] = [
         lazy: () => import('./pages/BlogPost'),
         getStaticPaths: async () => (await getPosts()).map((p) => `blog/${p.slug}`),
       },
+      { path: 'tahlil', lazy: () => import('./pages/Diagnosis') },
       { path: 'aloqa', lazy: () => import('./pages/Contact') },
       { path: 'maxfiylik', lazy: () => import('./pages/Privacy') },
       { path: 'oferta', lazy: () => import('./pages/Offer') },
-      { path: 'boshqaruv', lazy: () => import('./pages/Admin') },
       { path: '*', lazy: () => import('./pages/NotFound') },
     ],
   },
+  { path: '/boshqaruv', lazy: () => import('./pages/Admin') },
 ]

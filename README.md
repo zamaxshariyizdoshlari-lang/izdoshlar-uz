@@ -43,6 +43,27 @@ Bazaning xavfsizlik qoidalari (anon nimani o'qiy/yoza oladi, admin chegaralari) 
 
 > Pastdagi Django (`backend/`) bo'limlari eski arxitektura uchun. Supabase'ga to'liq o'tilgach o'chiriladi.
 
+## Admin panel, statistika va biznes tahlili
+
+**Admin panel** (`/boshqaruv`, sayt sarlavhasi va footerisiz, alohida to'liq ekran): yon menyu, Supabase login.
+
+| Bo'lim | Nima qiladi |
+|---|---|
+| Statistika | Tashrif buyuruvchilar, ko'rishlar, buyurtmalar, konversiya, demo ochilishlari (oldingi davr bilan taqqoslash), dinamika grafigi, hozir onlayn, top sahifalar, manbalar, UTM, qurilma, brauzer, OT, davlat, soatlar, harakatlar, buyurtmalar holati/xizmati; 7/30/90 kun, CSV |
+| Buyurtmalar | Filtr, qidiruv, status, ichki izoh, status tarixi, CSV yuklash (Excel formulalaridan himoyalangan) |
+| Mahsulotlar | Qo'shish, tahrirlash, rasm yuklash, yashirish, o'chirish |
+| Sozlamalar | Parolni almashtirish |
+
+**Statistika** cookie'siz va anonim: sayt `track` Edge Function'iga sahifa ko'rishlari va harakatlarni yuboradi; IP saqlanmaydi, "sid" har kuni yangilanadigan qaytarib bo'lmaydigan xesh. Botlar, `/boshqaruv`, "Kuzatma" (DNT) yoqilgan brauzerlar va admin o'z brauzerida hisoblanmaydi. Ma'lumotlar 180 kundan keyin o'chiriladi. Hisob: `public.admin_stats(kunlar)` (faqat admin).
+
+**Biznes tahlili** (`/tahlil`): mijoz biznes turi, og'riqli nuqtalar va jamoa hajmini belgilaydi, qoidalar asosida taxminiy yechimlar, muddat va mos paketni oladi, "Shuni tayyorlab bering" tugmasi buyurtma formasini shu ma'lumot bilan to'ldirib ochadi. Yechimlar va muammolar: `frontend/src/i18n/diagnosis.uz.ts` (qo'shish/o'zgartirish oson), mantiq: `frontend/src/lib/diagnosis.ts`. Bu AI emas, qoidalar asosidagi taxminiy tavsiya.
+
+Testlar:
+
+```bash
+node --test supabase/tests/submit-order.test.ts supabase/tests/track.test.ts frontend/tests/diagnosis.test.ts
+```
+
 ## Lokal ishga tushirish
 
 **Backend** (Python 3.12+):

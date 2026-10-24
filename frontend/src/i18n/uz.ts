@@ -11,6 +11,7 @@ export const uz = {
     products: 'Mahsulotlar',
     about: 'Haqimda',
     schools: 'Maktablar',
+    diagnosis: 'Bepul tahlil',
     blog: 'Blog',
     contact: 'Aloqa',
     order: 'Buyurtma berish',
@@ -76,6 +77,11 @@ export const uz = {
           to: '/mahsulotlar',
         },
       ],
+    },
+    diagnosis: {
+      title: 'Biznesingizdagi ogʻriqli nuqtani toping',
+      text: "3 ta savolga javob bering: taxminiy yechim, muddat va mos paketni olasiz. Yoqsa, shuni tayyorlab beramiz.",
+      button: 'Bepul tahlilni boshlash',
     },
     featured: { title: 'Tanlangan loyihalar', subtitle: 'Muammodan natijagacha: real ishlarimizdan namunalar' },
     process: {

@@ -2,6 +2,7 @@ import { Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { t } from '../../i18n'
+import { trackView } from '../../lib/analytics'
 import { FloatingContact } from './FloatingContact'
 import { QuickContact } from '../sections/QuickContact'
 import { BRAND_NAME, ENABLE_BUSINESS, CONTACT_PHONE, LEGAL_ADDRESS, LEGAL_INN, LEGAL_NAME, TELEGRAM_USERNAME } from '../../lib/config'
@@ -13,6 +14,7 @@ const allLinks = [
   { to: '/loyihalar', label: t.nav.projects },
   { to: '/xizmatlar', label: t.nav.services },
   { to: '/narxlar', label: t.nav.pricing },
+  { to: '/tahlil', label: t.nav.diagnosis },
   { to: '/maktablar', label: t.nav.schools },
   { to: '/mahsulotlar', label: t.nav.products },
   { to: '/blog', label: t.nav.blog },
@@ -21,7 +23,7 @@ const allLinks = [
 const links = allLinks.filter((l) => ENABLE_BUSINESS || l.to !== '/narxlar')
 
 // Sarlavhada joy yetishi uchun "Haqimda" faqat mobil menyu va footerda
-const headerLinks = links.filter((l) => l.to !== '/haqimda')
+const headerLinks = links.filter((l) => l.to !== '/haqimda' && l.to !== '/blog')
 
 function Logo() {
   return (
@@ -160,6 +162,10 @@ export default function Layout() {
   useEffect(() => {
     if (!hash) window.scrollTo({ top: 0 })
   }, [pathname, hash])
+
+  useEffect(() => {
+    trackView(pathname)
+  }, [pathname])
 
   return (
     <div className="flex min-h-screen flex-col">

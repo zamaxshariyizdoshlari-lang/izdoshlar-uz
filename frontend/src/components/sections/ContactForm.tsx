@@ -2,6 +2,7 @@ import { CheckCircle2 } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { t } from '../../i18n'
+import { trackEvent } from '../../lib/analytics'
 import { submitOrder, type OrderPayload } from '../../lib/api'
 import { ENABLE_BUSINESS } from '../../lib/config'
 import { QuickContact } from './QuickContact'
@@ -77,7 +78,7 @@ export function ContactForm() {
       kind: q.get('tur') === 'demo' ? 'demo' : q.get('mahsulot') || q.get('xizmat') ? 'order' : f.kind,
       service_type: q.get('tur') === 'demo' ? 'erp' : q.get('xizmat') && q.get('xizmat')! in serviceOptions ? q.get('xizmat')! : f.service_type,
       package: q.get('paket') && q.get('paket')! in c.packageOptions ? q.get('paket')! : f.package,
-      description: q.get('mahsulot') && !f.description ? `Mahsulot: ${q.get('mahsulot')!.slice(0, 120)}\n` : f.description,
+      description: q.get('tahlil') && !f.description ? q.get('tahlil')!.slice(0, 1400) : q.get('mahsulot') && !f.description ? `Mahsulot: ${q.get('mahsulot')!.slice(0, 120)}\n` : f.description,
     }))
   }, [search])
 
@@ -129,6 +130,7 @@ export function ContactForm() {
     }
     const res = await submitOrder(payload)
     if (res.ok) {
+      trackEvent('order_submit', { kind: form.kind, service: form.service_type })
       setStatus('done')
       return
     }

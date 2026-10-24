@@ -15,3 +15,4 @@ backend/media/
 
 # Local Netlify folder
 .netlify
+supabase/ADMIN_LOGIN.txt

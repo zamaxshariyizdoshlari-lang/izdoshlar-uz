@@ -3,6 +3,7 @@ import { Link, useLoaderData } from 'react-router-dom'
 import { Seo } from '../components/layout/Seo'
 import { ButtonLink, PageHeader } from '../components/ui'
 import { t } from '../i18n'
+import { trackEvent } from '../lib/analytics'
 import { getProducts, type Product } from '../lib/api'
 
 const p = t.products
@@ -34,6 +35,7 @@ function ProductCard({ product }: { product: Product }) {
         <Link
           to={`/aloqa?xizmat=content&mahsulot=${encodeURIComponent(product.title.slice(0, 120))}`}
           className="btn btn-primary mt-3"
+          onClick={() => trackEvent('product_click', { slug: product.slug })}
         >
           {p.order} <ArrowRight className="h-4 w-4" aria-hidden />
         </Link>

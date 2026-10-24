@@ -1,6 +1,7 @@
 import { Phone, Send } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { t } from '../../i18n'
+import { trackEvent } from '../../lib/analytics'
 import { CONTACT_PHONE } from '../../lib/config'
 import { hasQuickContact, telegramHandle } from '../sections/QuickContact'
 
@@ -17,12 +18,12 @@ export function FloatingContact() {
   return (
     <div className="fixed bottom-4 right-4 z-30 flex flex-col gap-3 sm:bottom-6 sm:right-6">
       {CONTACT_PHONE && (
-        <a href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`} className={`${base} bg-white text-brand-700 border-2 border-brand-200 sm:hidden`} aria-label={t.quick.call}>
+        <a href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`} className={`${base} bg-white text-brand-700 border-2 border-brand-200 sm:hidden`} aria-label={t.quick.call} onClick={() => trackEvent('phone_click')}>
           <Phone className="h-6 w-6" aria-hidden />
         </a>
       )}
       {telegramHandle && (
-        <a href={`https://t.me/${telegramHandle}`} target="_blank" rel="noopener noreferrer" className={`${base} bg-brand-600 text-white hover:bg-brand-700`} aria-label={t.quick.telegram}>
+        <a href={`https://t.me/${telegramHandle}`} target="_blank" rel="noopener noreferrer" className={`${base} bg-brand-600 text-white hover:bg-brand-700`} aria-label={t.quick.telegram} onClick={() => trackEvent('telegram_click')}>
           <Send className="h-6 w-6" aria-hidden />
         </a>
       )}

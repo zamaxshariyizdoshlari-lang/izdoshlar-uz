@@ -73,7 +73,7 @@ export function getToken(): string | null {
   return readSession()?.access_token ?? null
 }
 
-async function raw(path: string, init: RequestInit & { token?: string | null } = {}) {
+export async function raw(path: string, init: RequestInit & { token?: string | null } = {}) {
   const { token, headers, ...rest } = init
   const res = await fetch(`${SUPABASE_URL}${path}`, {
     ...rest,
