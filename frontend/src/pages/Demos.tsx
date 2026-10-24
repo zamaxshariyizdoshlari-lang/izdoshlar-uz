@@ -1,4 +1,5 @@
 import { Monitor } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Link, useLoaderData } from 'react-router-dom'
 import { Seo } from '../components/layout/Seo'
 import { ButtonLink, PageHeader } from '../components/ui'
@@ -9,7 +10,12 @@ export const loader = () => getDemos()
 export const DEMO_CATEGORIES: Record<string, string> = { sayt: 'Sayt', bot: 'Bot', erp: 'ERP / tizim', kontent: 'Kontent', boshqa: 'Boshqa' }
 
 export function Component() {
-  const demos = useLoaderData() as Demo[]
+  const built = useLoaderData() as Demo[]
+  const [demos, setDemos] = useState(built)
+  // Build'dan keyin qoʻshilgan demolar ham koʻrinsin: brauzerda yangilab olamiz
+  useEffect(() => {
+    getDemos().then(setDemos)
+  }, [])
   return (
     <>
       <Seo title="Demo saytlar" description="Tayyor saytlarimizni sinab koʻring: telefon, planshet va kompyuterda qanday koʻrinishini oʻzingiz koʻring." path="/demolar" />
