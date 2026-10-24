@@ -11,8 +11,10 @@ db.sqlite3
 staticfiles/
 .claude/
 media/
-backend/media/
 
 # Local Netlify folder
 .netlify
 supabase/ADMIN_LOGIN.txt
+
+# eski Django backend (olib tashlangan); lokal qoldiqlar
+backend/

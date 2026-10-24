@@ -75,7 +75,8 @@ export const privacy: LegalDoc = {
     {
       h: '9. Cookie va brauzer xotirasi',
       p: [
-        'Sayt reklama cookie-fayllarini ishlatmaydi. Boshqaruv paneliga kirgan xodim uchun brauzer xotirasida sessiya kaliti saqlanadi. Kelajakda tahlil (analytics) vositalari ulansa, bu siyosat yangilanadi.',
+        'Sayt reklama cookie-fayllarini ishlatmaydi va sizni boshqa saytlarda kuzatmaydi. Boshqaruv paneliga kirgan xodim uchun brauzer xotirasida sessiya kaliti saqlanadi.',
+        'Anonim statistika: sayt qaysi sahifalar koʻrilgani va qaysi tugmalar bosilganini oʻz serverimizda hisoblaydi (uchinchi tomon xizmatlarisiz, cookie-fayllarsiz). IP manzil saqlanmaydi; tashrif identifikatori har kuni yangilanadigan, qaytarib boʻlmaydigan xesh boʻlib, sizni shaxsan aniqlash imkonini bermaydi. Saqlanadigan maʼlumot: sahifa manzili, manba (masalan, Telegram yoki Google), qurilma turi, brauzer, tizim va taxminiy davlat. Statistika 180 kundan keyin oʻchiriladi. Brauzeringizda «Kuzatma» (Do Not Track) yoqilgan boʻlsa, statistika umuman hisoblanmaydi.',
       ],
     },
     {
