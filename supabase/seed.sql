@@ -2,13 +2,6 @@
 
 begin;
 
-insert into public.projects (slug, title, category, summary, problem, solution, result, tech, featured, placeholder, sort_order) values
-  ('namuna-maktab-erp', 'Namuna: Maktab ERP tizimi', 'erp', 'Davomat, baholar va ota-onalar bilan aloqani bitta tizimga jamlagan namuna loyiha.', 'Maktabda davomat va baholar qogʻozda yuritilardi, ota-onalar bola haqida kech xabar topardi, hisobot tayyorlash kunlar olardi.', 'Davomat, baho, jadval va ota-onalar kabineti bitta veb-tizimga jamlandi. Oʻqituvchi telefondan ham toʻldira oladi.', '[NATIJA: masalan, hisobot vaqti 3 kundan 10 daqiqagacha qisqardi]', array['React', 'Django', 'PostgreSQL']::text[], true, true, 0),
-  ('namuna-dars-jadvali', 'Namuna: Avtomatik dars jadvali', 'erp', 'Oʻqituvchi va xonalar cheklovlarini hisobga olib jadval tuzadigan namuna modul.', 'Dars jadvalini qoʻlda tuzish haftalar olardi va doim toʻqnashuvlar chiqardi.', 'Cheklovlarni kiritish bilan jadval avtomatik tuziladi, toʻqnashuvlar koʻrsatiladi, qoʻlda tuzatish mumkin.', '[NATIJA: jadval tuzish vaqti va xatolar soni]', array['Python', 'Django', 'React']::text[], true, true, 1),
-  ('namuna-telegram-bot', 'Namuna: Buyurtma qabul qiluvchi Telegram bot', 'ai-bot', 'Mijoz savollariga javob beradigan va buyurtmani adminga yetkazadigan namuna bot.', 'Doʻkon egasi kechayu kunduz xabarlarga javob berishga majbur edi va baʼzi mijozlar yoʻqolardi.', 'Bot savollarga javob beradi, buyurtmani yigʻadi va adminga Telegram orqali yuboradi.', '[NATIJA: javob vaqti va buyurtmalar soni]', array['Python', 'Telegram Bot API', 'Django']::text[], true, true, 2),
-  ('namuna-markaz-sayti', 'Namuna: Oʻquv markazi sayti', 'sayt', 'Kurslar, narxlar va roʻyxatdan oʻtish formasi bor tez va zamonaviy sayt.', 'Markazning sayti yoʻq edi, oʻquvchilar faqat Instagram orqali murojaat qilardi.', 'Kurslar katalogi, oʻqituvchilar sahifasi va ariza formasi bor, telefonda qulay sayt yaratildi.', '[NATIJA: murojaatlar soni oʻsishi]', array['React', 'Tailwind', 'Django']::text[], false, true, 3),
-  ('namuna-taqdimotlar', 'Namuna: Dars taqdimotlari toʻplami', 'kontent', 'Oʻqituvchilar uchun tayyor, chiroyli va tahrirlash oson taqdimotlar toʻplami.', 'Oʻqituvchilar har dars uchun taqdimot tayyorlashga soatlab vaqt sarflardi.', 'Mavzular boʻyicha tayyor, bir xil uslubdagi va oson tahrirlanadigan taqdimotlar tayyorlandi.', '[NATIJA: foydalanuvchilar soni yoki fikrlar]', array['PowerPoint', 'Canva']::text[], false, true, 4);
-
 insert into public.packages (key, name, tagline, price_text, popular, features, sort_order) values
   ('start', 'Start', 'Boshlovchi biznes uchun', '[NARX]', false, array['Bir sahifali sayt yoki oddiy bot', 'Telefonga moslashgan dizayn', 'Aloqa formasi', '1 oy bepul qoʻllab-quvvatlash']::text[], 0),
   ('pro', 'Pro', 'Oʻsayotgan biznes uchun', '[NARX]', true, array['Koʻp sahifali sayt yoki funksiyali bot', 'Admin panel', 'SEO asoslari', 'Telegram bildirishnomalar', '3 oy bepul qoʻllab-quvvatlash']::text[], 1),
@@ -41,11 +34,6 @@ insert into public.faq (scope, question, answer, sort_order) values
   ('pricing', 'Maktablar uchun narx nega koʻrsatilmagan?', 'Maktab hajmi, oʻquvchilar soni va kerakli modullar har xil. Shuning uchun demo koʻrsatib, soʻng aniq narx aytamiz.', 6),
   ('pricing', 'Avval toʻlov kerakmi?', 'Odatda ishni boshlash uchun kelishilgan qismi oldindan toʻlanadi, qolgani topshirishda. Shartlar muzokarada aniqlanadi.', 7),
   ('pricing', 'Paketni keyinroq kengaytirsa boʻladimi?', 'Ha. Keyinroq yuqoriroq paketga oʻtish yoki qoʻshimcha xizmat olish mumkin.', 8);
-
-insert into public.testimonials (author, role, text, published, sort_order) values
-  ('[Ism Familiya]', '[Lavozim, tashkilot]', '[Haqiqiy mijoz fikri shu yerga qoʻyiladi. Soxta fikr yozmang.]', false, 0),
-  ('[Ism Familiya]', '[Lavozim, tashkilot]', '[Haqiqiy mijoz fikri shu yerga qoʻyiladi.]', false, 1),
-  ('[Ism Familiya]', '[Lavozim, tashkilot]', '[Haqiqiy mijoz fikri shu yerga qoʻyiladi.]', false, 2);
 
 insert into public.posts (slug, title, description, body, date) values
   ('biznes-uchun-telegram-bot', 'Biznes uchun Telegram bot: qachon kerak?', 'Telegram bot qaysi bizneslarga foyda keltiradi va uni yaratishdan oldin nimalarni oʻylab koʻrish kerak.', 'Oʻzbekistonda mijozlarning koʻpchiligi Telegramdan foydalanadi. Shuning uchun **Telegram bot** kichik va oʻrta biznes uchun eng tez foyda beradigan vositalardan biri.

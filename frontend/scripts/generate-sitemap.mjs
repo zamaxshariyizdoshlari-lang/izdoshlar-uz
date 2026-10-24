@@ -26,11 +26,14 @@ async function fromApi(path) {
 }
 
 const business = process.env.VITE_ENABLE_BUSINESS !== '0'
-const pages = ['', '/tahlil', '/demolar', '/maktablar', '/loyihalar', '/xizmatlar', ...(business ? ['/narxlar'] : []), '/mahsulotlar', '/haqimda', '/blog', '/aloqa', '/maxfiylik', '/oferta']
+const pages = ['', '/tahlil', '/maktablar', '/loyihalar', '/xizmatlar', ...(business ? ['/narxlar'] : []), '/mahsulotlar', '/haqimda', '/blog', '/aloqa', '/maxfiylik', '/oferta']
 const lastmod = {}
 
 const projects = (await fromApi('projects?select=slug&published=eq.true')) ?? JSON.parse(readFileSync(join(root, 'src/data/projects.json'), 'utf8'))
 projects.forEach((p) => pages.push(`/loyihalar/${p.slug}`))
+
+const demos = (await fromApi('demos?select=slug&published=eq.true')) ?? []
+demos.forEach((d) => pages.push(`/demolar/${d.slug}`))
 
 let posts = await fromApi('posts?select=slug,date&published=eq.true')
 if (!posts) {

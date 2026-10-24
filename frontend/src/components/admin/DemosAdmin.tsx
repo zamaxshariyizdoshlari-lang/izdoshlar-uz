@@ -1,9 +1,10 @@
 import { Eye, EyeOff, ExternalLink, FileArchive, Link2, Pencil, Plus, RefreshCw, Trash2, X } from 'lucide-react'
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
+import { DEMO_CATEGORIES } from '../../lib/demoCategories'
 import { ApiError } from '../../lib/adminApi'
 import { deleteDemo, extractZip, fetchDemos, saveDemo, setDemoPublished, type AdminDemo, type Extracted } from '../../lib/adminDemos'
 
-const CATEGORIES: Record<string, string> = { sayt: 'Sayt', bot: 'Bot', erp: 'ERP / tizim', kontent: 'Kontent', boshqa: 'Boshqa' }
+const CATEGORIES = DEMO_CATEGORIES
 const kb = (n: number) => (n > 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`)
 
 function DemoForm({ token, demo, onDone, onCancel, onExpired }: { token: string; demo: AdminDemo | null; onDone: (d: AdminDemo) => void; onCancel: () => void; onExpired: () => void }) {

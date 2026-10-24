@@ -6,7 +6,7 @@ import { Seo } from '../components/layout/Seo'
 import { trackEvent } from '../lib/analytics'
 import { getDemo, type Demo } from '../lib/api'
 import { SUPABASE_URL } from '../lib/config'
-import { DEMO_CATEGORIES } from './Demos'
+import { DEMO_CATEGORIES } from '../lib/demoCategories'
 import { Component as NotFound } from './NotFound'
 
 export const loader = ({ params }: LoaderFunctionArgs) => getDemo(params.slug ?? '')
@@ -107,7 +107,7 @@ export function Component() {
       <div className="border-b border-line bg-cream-100">
         <div className="container-page flex flex-wrap items-center justify-between gap-3 py-4">
           <div className="min-w-0">
-            <Link to="/demolar" className="inline-flex items-center gap-1 text-sm font-bold text-brand-700"><ArrowLeft className="h-4 w-4" aria-hidden /> Demolar</Link>
+            <Link to="/loyihalar" className="inline-flex items-center gap-1 text-sm font-bold text-brand-700"><ArrowLeft className="h-4 w-4" aria-hidden /> Bizning loyihalar</Link>
             <h1 className="truncate text-2xl">{demo.title}</h1>
             <p className="text-sm text-ink-500">{DEMO_CATEGORIES[demo.category] ?? demo.category}</p>
           </div>

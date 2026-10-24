@@ -1,25 +1,25 @@
-import { ArrowRight, Briefcase, GraduationCap, School } from 'lucide-react'
+import { ArrowRight, Briefcase, School } from 'lucide-react'
 import { Link, useLoaderData } from 'react-router-dom'
 import { Accordion, ButtonLink, CtaBand, SectionHeading } from '../components/ui'
 import { Seo } from '../components/layout/Seo'
 import { HeroArt } from '../components/sections/HeroArt'
-import { ProjectCard } from '../components/sections/ProjectCard'
 import { t } from '../i18n'
-import { getFaq, getFeaturedProjects, getTestimonials, type FaqItem, type Project, type Testimonial } from '../lib/api'
+import { getFaq, getDemos, getTestimonials, type Demo, type FaqItem, type Testimonial } from '../lib/api'
+import { DEMO_CATEGORIES } from '../lib/demoCategories'
 import { BRAND_NAME, ENABLE_BUSINESS, SITE_URL } from '../lib/config'
 
-const audienceIcons = { school: School, business: Briefcase, teacher: GraduationCap }
+const audienceIcons = { school: School, business: Briefcase }
 const h = t.home
 const hero = ENABLE_BUSINESS ? h.hero : h.heroSchools
-const audiences = h.audiences.items.filter((a) => ENABLE_BUSINESS || a.key !== 'business')
+const audiences = h.audiences.items.filter((a) => a.key !== 'teacher' && (ENABLE_BUSINESS || a.key !== 'business'))
 
 export async function loader() {
-  const [featured, testimonials, faq] = await Promise.all([getFeaturedProjects(), getTestimonials(), getFaq('home')])
+  const [featured, testimonials, faq] = await Promise.all([getDemos(), getTestimonials(), getFaq('home')])
   return { featured, testimonials, faq }
 }
 
 export function Component() {
-  const { featured, testimonials, faq } = useLoaderData() as { featured: Project[]; testimonials: Testimonial[]; faq: FaqItem[] }
+  const { featured, testimonials, faq } = useLoaderData() as { featured: Demo[]; testimonials: Testimonial[]; faq: FaqItem[] }
   return (
     <>
       <Seo
@@ -78,19 +78,32 @@ export function Component() {
         </div>
       </section>
 
-      <section className="section bg-cream-100">
-        <div className="container-page">
-          <SectionHeading title={h.featured.title} subtitle={h.featured.subtitle} />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((p) => (
-              <ProjectCard key={p.slug} project={p} />
-            ))}
+      {featured.length > 0 && (
+        <section className="section bg-cream-100">
+          <div className="container-page">
+            <SectionHeading title={h.featured.title} subtitle={h.featured.subtitle} />
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.slice(0, 3).map((d) => (
+                <Link key={d.slug} to={`/demolar/${d.slug}`} className="card card-hover group flex flex-col !p-0 overflow-hidden">
+                  {d.cover ? (
+                    <img src={d.cover} alt="" loading="lazy" className="aspect-video w-full object-cover" />
+                  ) : (
+                    <div className="aspect-video bg-gradient-to-br from-brand-100 to-sun-100" />
+                  )}
+                  <div className="flex flex-1 flex-col p-5">
+                    <span className="badge self-start">{DEMO_CATEGORIES[d.category] ?? d.category}</span>
+                    <h3 className="mt-3 text-xl">{d.title}</h3>
+                    {d.description && <p className="mt-2 line-clamp-2 flex-1 text-ink-700">{d.description}</p>}
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="mt-8 text-center">
+              <ButtonLink to="/loyihalar" variant="secondary">{t.common.allProjects}</ButtonLink>
+            </div>
           </div>
-          <div className="mt-8 text-center">
-            <ButtonLink to="/loyihalar" variant="secondary">{t.common.allProjects}</ButtonLink>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="section">
         <div className="container-page">

@@ -47,7 +47,7 @@ export const uz = {
     hero: {
       badge: "Biznes uchun raqamli yechimlar",
       title: "Biznesingiz uchun ishonchli raqamli yechimlar",
-      text: "Sayt, Telegram bot, AI agent va boshqaruv tizimlari. Oddiy tilda tushuntiramiz, oʻz vaqtida topshiramiz.",
+      text: "Sayt, mobil ilova, Telegram bot va AI agent. Oddiy tilda tushuntiramiz, oʻz vaqtida topshiramiz.",
       ctaPrimary: 'Buyurtma berish',
       ctaSecondary: 'Loyihalarni koʻrish',
     },
@@ -83,7 +83,7 @@ export const uz = {
       text: "3 ta savolga javob bering: taxminiy yechim, muddat va mos paketni olasiz. Yoqsa, shuni tayyorlab beramiz.",
       button: 'Bepul tahlilni boshlash',
     },
-    featured: { title: 'Tanlangan loyihalar', subtitle: 'Muammodan natijagacha: real ishlarimizdan namunalar' },
+    featured: { title: 'Bizning loyihalar', subtitle: 'Tayyor ishlarimiz: kirib, telefon va kompyuterda sinab koʻring' },
     process: {
       title: 'Qanday ishlaymiz',
       subtitle: "Toʻrt oddiy qadam, hech qanday kutilmagan holatsiz",
@@ -103,8 +103,8 @@ export const uz = {
     },
   },
   projects: {
-    title: 'Loyihalar',
-    subtitle: "Qilgan ishlarimizdan namunalar",
+    title: 'Bizning loyihalar',
+    subtitle: "Tayyor sayt, ilova, Telegram bot va AI agentlarimiz: kirib, oʻzingiz sinab koʻring",
     filterAll: 'Hammasi',
     categories: {
       sayt: 'Sayt',
@@ -112,7 +112,9 @@ export const uz = {
       'ai-bot': 'AI / Bot',
       kontent: 'Kontent',
     } as Record<string, string>,
-    empty: "Bu toifada hozircha loyiha yoʻq.",
+    empty: "Hozircha loyiha yoʻq.",
+    soonTitle: 'Loyihalar tez orada',
+    soonText: "Tayyor ishlarimizni shu yerga joylayapmiz. Oʻzingizga mos yechimni topish uchun bepul tahlildan oʻting yoki vazifangizni yozing.",
     problem: 'Muammo',
     solution: 'Yechim',
     result: 'Natija',
@@ -124,18 +126,9 @@ export const uz = {
   },
   services: {
     title: 'Xizmatlar',
-    subtitle: "Toʻrt asosiy yoʻnalishda ishlaymiz",
+    subtitle: "Asosiy yoʻnalishlar: sayt, ilova, Telegram bot va AI agent",
     subtitleSchools: 'Maktablar va oʻqituvchilar uchun',
     items: [
-      {
-        key: 'school',
-        icon: 'school',
-        title: 'Maktab boshqaruvi (ERP) va dars jadvali',
-        text: "Davomat, baholar, ota-onalar bilan aloqa, toʻlovlar va avtomatik dars jadvali bitta tizimda.",
-        points: ['Dars jadvalini avtomatik tuzish', 'Ota-onalar uchun kabinet', 'Hisobotlar va statistika', "AI yordamchi (oʻqituvchi va maʼmuriyat uchun)"],
-        cta: "Demo soʻrash",
-        to: '/aloqa?tur=demo',
-      },
       {
         key: 'web',
         icon: 'globe',
@@ -153,6 +146,15 @@ export const uz = {
         points: ['Telegram va Instagram botlar', "AI agent: savol-javob, maʼlumot yigʻish", "CRM va toʻlov bilan integratsiya", "Admin uchun bildirishnomalar"],
         cta: 'Buyurtma berish',
         to: '/aloqa?xizmat=bot',
+      },
+      {
+        key: 'school',
+        icon: 'school',
+        title: 'Maktab boshqaruvi (ERP) va dars jadvali',
+        text: "Davomat, baholar, ota-onalar bilan aloqa, toʻlovlar va avtomatik dars jadvali bitta tizimda.",
+        points: ['Dars jadvalini avtomatik tuzish', 'Ota-onalar uchun kabinet', 'Hisobotlar va statistika', "AI yordamchi (oʻqituvchi va maʼmuriyat uchun)"],
+        cta: "Demo soʻrash",
+        to: '/aloqa?tur=demo',
       },
       {
         key: 'content',

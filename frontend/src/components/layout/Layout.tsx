@@ -15,7 +15,6 @@ const allLinks = [
   { to: '/xizmatlar', label: t.nav.services },
   { to: '/narxlar', label: t.nav.pricing },
   { to: '/tahlil', label: t.nav.diagnosis },
-  { to: '/demolar', label: 'Demolar' },
   { to: '/maktablar', label: t.nav.schools },
   { to: '/mahsulotlar', label: t.nav.products },
   { to: '/blog', label: t.nav.blog },
@@ -24,7 +23,7 @@ const allLinks = [
 const links = allLinks.filter((l) => ENABLE_BUSINESS || l.to !== '/narxlar')
 
 // Sarlavhada joy yetishi uchun "Haqimda" faqat mobil menyu va footerda
-const headerLinks = links.filter((l) => l.to !== '/haqimda' && l.to !== '/blog' && l.to !== '/mahsulotlar')
+const headerLinks = links.filter((l) => l.to !== '/haqimda' && l.to !== '/blog' && l.to !== '/mahsulotlar' && l.to !== '/maktablar')
 
 function Logo() {
   return (
