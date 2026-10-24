@@ -108,7 +108,7 @@ export function Component() {
   const brief = encodeURIComponent(`Demo: "${demo.title}" kabi sayt kerak.`)
   return (
     <>
-      <Seo title={demo.title} description={demo.description || `${demo.title}: demo sayt`} path={`/demolar/${demo.slug}`} />
+      <Seo title={demo.title} description={demo.description || `${demo.title}: demo sayt`} path={`/demolar/${demo.slug}`} image={demo.cover || undefined} />
       <div className="border-b border-line bg-cream-100">
         <div className="container-page flex flex-wrap items-center justify-between gap-3 py-4">
           <div className="min-w-0">

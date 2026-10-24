@@ -38,6 +38,18 @@ export interface Stats {
   orders_by_service: { name: string; count: number }[]
 }
 
+export interface Funnel {
+  visitors: number
+  projects: number
+  intent: number
+  leads: number
+}
+
+export async function fetchFunnel(token: string, days: number): Promise<Funnel> {
+  const res = await raw('/rest/v1/rpc/admin_funnel', { method: 'POST', token, body: JSON.stringify({ p_days: days }) })
+  return res.json()
+}
+
 export async function fetchStats(token: string, days: number): Promise<Stats> {
   const res = await raw('/rest/v1/rpc/admin_stats', { method: 'POST', token, body: JSON.stringify({ p_days: days }) })
   return res.json()

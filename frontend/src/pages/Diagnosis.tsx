@@ -6,7 +6,8 @@ import { PageHeader } from '../components/ui'
 import { businessTypes, sizes, ui, type Size } from '../i18n/diagnosis.uz'
 import { trackEvent } from '../lib/analytics'
 import { ENABLE_BUSINESS } from '../lib/config'
-import { orderLink, painsFor, recommend } from '../lib/diagnosis'
+import { buildBrief, orderLink, painsFor, recommend } from '../lib/diagnosis'
+import { DiagnosisLead } from '../components/sections/DiagnosisLead'
 
 type Step = 1 | 2 | 3 | 'result'
 
@@ -157,6 +158,8 @@ export function Component() {
                   </li>
                 ))}
               </ol>
+
+              <DiagnosisLead brief={buildBrief(typeId, size, painIds, rec, note)} service={rec.first?.service ?? 'other'} tier={rec.tier} kind={typeId} />
 
               <div className="card mt-8 text-center">
                 <p className="text-lg font-bold">{ui.orderHint}</p>

@@ -45,6 +45,7 @@ Bazaning xavfsizlik qoidalari (anon nimani o'qiy/yoza oladi, admin chegaralari) 
 | Buyurtmalar | Filtr, qidiruv, status, ichki izoh, status tarixi, CSV yuklash (Excel formulalaridan himoyalangan) |
 | Mahsulotlar | Qo'shish, tahrirlash, rasm yuklash, yashirish, o'chirish |
 | Kontent | Savol-javob, mijoz fikrlari, blog, loyiha matnlari, narx paketlari va qo'shimcha xizmatlarni qo'shish/tahrirlash/yashirish/o'chirish |
+| Statistika (voronka) | Tashrif -> loyiha/demo -> tahlil/narx/aloqa -> so'rov bosqichlari (`admin_funnel`) |
 | Demolar | Tayyor saytni .zip (index.html ildizda; Vite uchun `base: './'`) yoki https havola sifatida qo'shish; `/demolar` sahifasida mijozlar telefon/planshet/kompyuter ko'rinishida sinaydi |
 | Sozlamalar | Parolni almashtirish |
 
@@ -55,7 +56,7 @@ Bazaning xavfsizlik qoidalari (anon nimani o'qiy/yoza oladi, admin chegaralari) 
 Testlar:
 
 ```bash
-node --test supabase/tests/submit-order.test.ts supabase/tests/track.test.ts frontend/tests/diagnosis.test.ts
+node --test supabase/tests/submit-order.test.ts supabase/tests/track.test.ts supabase/tests/telegram-bot.test.ts frontend/tests/diagnosis.test.ts
 ```
 
 ## Lokal ishga tushirish
@@ -68,6 +69,12 @@ npm run dev              # http://localhost:5173
 ```
 
 Asosiy o'zgaruvchilar (`frontend/.env`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_SITE_URL`, `VITE_TELEGRAM_USERNAME`, `VITE_CONTACT_PHONE`, `VITE_CONTACT_EMAIL`, `VITE_LEGAL_NAME`, `VITE_LEGAL_INN`, `VITE_LEGAL_ADDRESS`, `VITE_BRAND_NAME`, `VITE_NOINDEX` (sinov saytida 1), `VITE_ENABLE_BUSINESS` (standart yoqilgan, `0` o'chiradi), `VITE_REQUIRE_API` (production'da 1).
+
+## Telegram bot
+
+Edge Function `telegram-bot` (webhook): `/start` menyu, narxlar (paketlardan), loyihalar (demolardan), bepul tahlil havolasi, aloqa va buyurtma qoldirish (rozilik, ism, telefon, tavsif). Buyurtma `orders` jadvaliga tushadi (manba `/telegram-bot`) va egasiga Telegram xabari boradi. Suhbat holati `bot_sessions` jadvalida (faqat service_role). Webhook sirri bot tokenidan olinadi, qo'shimcha secret kerak emas.
+
+Ulash (bir marta): brauzerda `https://<loyiha>.supabase.co/functions/v1/telegram-bot?setup=1` ni oching. Ixtiyoriy secret'lar: `SITE_URL`, `CONTACT_TELEGRAM`, `CONTACT_PHONE`. Tokenni almashtirsangiz `?setup=1` ni qayta oching.
 
 ## Demolar
 
@@ -104,7 +111,7 @@ Statik hostingda `/narxlar` manzili `narxlar/index.html` ga yo'naltirilishi shar
 ## Testlar
 
 ```bash
-node --test supabase/tests/submit-order.test.ts supabase/tests/track.test.ts frontend/tests/diagnosis.test.ts
+node --test supabase/tests/submit-order.test.ts supabase/tests/track.test.ts supabase/tests/telegram-bot.test.ts frontend/tests/diagnosis.test.ts
 cd frontend && npx tsc -b
 ```
 

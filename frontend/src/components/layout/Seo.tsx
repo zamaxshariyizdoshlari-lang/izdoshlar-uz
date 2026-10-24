@@ -8,11 +8,13 @@ interface SeoProps {
   path: string
   type?: 'website' | 'article'
   jsonLd?: object
+  image?: string // ulashishda koʻrinadigan rasm (toʻliq https manzil)
 }
 
-export function Seo({ title, description = ENABLE_BUSINESS ? t.seo.defaultDescription : t.seo.defaultDescriptionSchools, path, type = 'website', jsonLd }: SeoProps) {
+export function Seo({ title, description = ENABLE_BUSINESS ? t.seo.defaultDescription : t.seo.defaultDescriptionSchools, path, type = 'website', jsonLd, image }: SeoProps) {
   const fullTitle = title ? `${title} | ${BRAND_NAME}` : `${BRAND_NAME}: ${(ENABLE_BUSINESS ? t.home.hero : t.home.heroSchools).badge}`
   const url = `${SITE_URL}${path}`
+  const img = image || `${SITE_URL}/og.png`
   return (
     <Head>
       <title>{fullTitle}</title>
@@ -25,7 +27,11 @@ export function Seo({ title, description = ENABLE_BUSINESS ? t.seo.defaultDescri
       <meta property="og:url" content={url} />
       <meta property="og:locale" content="uz_UZ" />
       <meta property="og:site_name" content={BRAND_NAME} />
-      <meta name="twitter:card" content="summary" />
+      <meta property="og:image" content={img} />
+      {!image && <meta property="og:image:width" content="1200" />}
+      {!image && <meta property="og:image:height" content="630" />}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:image" content={img} />
       {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
     </Head>
   )

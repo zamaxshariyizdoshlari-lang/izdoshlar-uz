@@ -1,7 +1,7 @@
 import { Download, Eye, MousePointerClick, RefreshCw, ShoppingBag, Target, Users } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ApiError } from '../../lib/adminApi'
-import { fetchStats, type Stats } from '../../lib/adminExtra'
+import { fetchFunnel, fetchStats, type Funnel, type Stats } from '../../lib/adminExtra'
 import { BarList, Donut, Empty, HourBars, KpiCard, Panel, TimeSeries, nf } from './charts'
 
 const RANGES = [7, 30, 90]
@@ -19,6 +19,7 @@ const EVENT_LABELS: Record<string, string> = {
   demo_open: 'Demo ochildi',
   analysis_done: 'Tahlil yakunlandi',
   analysis_order: 'Tahlildan buyurtma bosildi',
+  analysis_lead: 'Tahlildan soʻrov yuborildi',
 }
 const STATUS_LABELS: Record<string, string> = { yangi: 'Yangi', muzokara: 'Muzokara', jarayonda: 'Jarayonda', tugadi: 'Tugadi' }
 const SERVICE_LABELS: Record<string, string> = {
@@ -52,13 +53,16 @@ export function StatsPage({ token, onExpired }: { token: string; onExpired: () =
   const [days, setDays] = useState(30)
   const [metric, setMetric] = useState<(typeof METRICS)[number]['key']>('visitors')
   const [stats, setStats] = useState<Stats | null>(null)
+  const [funnel, setFunnel] = useState<Funnel | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      setStats(await fetchStats(token, days))
+      const [st, fn] = await Promise.all([fetchStats(token, days), fetchFunnel(token, days).catch(() => null)])
+      setStats(st)
+      setFunnel(fn)
       setError('')
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) onExpired()
@@ -124,6 +128,33 @@ export function StatsPage({ token, onExpired }: { token: string; onExpired: () =
         <KpiCard label="Konversiya" value={`${conv.toFixed(1)}%`} cur={conv} prev={prevConv} icon={<Target className="h-4 w-4" aria-hidden />} hint="Buyurtma / tashrif" />
         <KpiCard label="Demo ochilishlari" value={nf.format(cur?.demo_opens ?? 0)} cur={cur?.demo_opens} prev={prev?.demo_opens} icon={<MousePointerClick className="h-4 w-4" aria-hidden />} />
       </div>
+
+      {funnel && funnel.visitors > 0 && (
+        <Panel title="Voronka: tashrifdan so'rovgacha">
+          <ol className="space-y-3">
+            {[
+              { label: 'Saytga kirdi', value: funnel.visitors },
+              { label: "Loyiha yoki demo ko'rdi", value: funnel.projects },
+              { label: "Tahlil, narx yoki aloqa sahifasiga o'tdi", value: funnel.intent },
+              { label: "So'rov yubordi", value: funnel.leads },
+            ].map((s, i, arr) => (
+              <li key={s.label}>
+                <div className="mb-1 flex items-baseline justify-between gap-3 text-sm">
+                  <span className="font-semibold text-slate-700">{s.label}</span>
+                  <span className="text-slate-500">
+                    <b className="text-slate-900">{nf.format(s.value)}</b>
+                    {i > 0 && arr[i - 1].value > 0 && <> · oldingisidan {((s.value / arr[i - 1].value) * 100).toFixed(0)}%</>}
+                  </span>
+                </div>
+                <div className="h-3 overflow-hidden rounded-full bg-slate-100">
+                  <div className="h-full rounded-full bg-brand-500" style={{ width: `${Math.max(2, (s.value / funnel.visitors) * 100)}%` }} />
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-3 text-xs text-slate-500">Kunlik noyob tashrif hisobida. Pastki qadam yuqoridagining ichida emas: odam bevosita narxlar sahifasiga kirishi mumkin.</p>
+        </Panel>
+      )}
 
       {empty && (
         <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-500">
