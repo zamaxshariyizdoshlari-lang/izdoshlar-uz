@@ -6,6 +6,11 @@
 [build.environment]
   NODE_VERSION = "22"
 
+[[redirects]]
+  from = "/demolar/*"
+  to = "/demolar/__shell/index.html"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]

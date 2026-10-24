@@ -1,6 +1,6 @@
 import { ArrowLeft, ExternalLink, Monitor, Smartphone, Tablet } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Link, useLoaderData, useParams, type LoaderFunctionArgs } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Head } from 'vite-react-ssg'
 import { Seo } from '../components/layout/Seo'
 import { trackEvent } from '../lib/analytics'
@@ -8,8 +8,6 @@ import { getDemo, type Demo } from '../lib/api'
 import { SUPABASE_URL } from '../lib/config'
 import { DEMO_CATEGORIES } from '../lib/demoCategories'
 import { Component as NotFound } from './NotFound'
-
-export const loader = ({ params }: LoaderFunctionArgs) => getDemo(params.slug ?? '')
 
 const DEVICES = [
   { id: 'desktop', label: 'Kompyuter', icon: Monitor, width: '100%' },
@@ -32,23 +30,30 @@ document.addEventListener('submit',function(e){e.preventDefault()},true);})();<\
 }
 
 export function Component() {
-  const loaded = useLoaderData() as Demo | null
   const { slug = '' } = useParams()
-  const [demo, setDemo] = useState<Demo | null>(loaded)
-  const [looked, setLooked] = useState(!!loaded || slug === '__fallback')
+  const [demo, setDemo] = useState<Demo | null>(null)
+  const [looked, setLooked] = useState(false)
   const [device, setDevice] = useState<(typeof DEVICES)[number]['id']>('desktop')
   const [srcdoc, setSrcdoc] = useState('')
   const [loadErr, setLoadErr] = useState('')
   const frame = useRef<HTMLIFrameElement>(null)
 
-  // Build'dan keyin qoʻshilgan demolar uchun: sahifa tayyor emas boʻlsa, brauzerda yuklaymiz
+  // Demolar build'dan keyin ham qoʻshiladi, shuning uchun har doim brauzerda yuklaymiz
   useEffect(() => {
-    if (demo || looked) return
+    if (slug === '__shell') return
+    let alive = true
+    setDemo(null)
+    setLooked(false)
+    setSrcdoc('')
     getDemo(slug).then((d) => {
+      if (!alive) return
       setDemo(d)
       setLooked(true)
     })
-  }, [demo, looked, slug])
+    return () => {
+      alive = false
+    }
+  }, [slug])
 
   useEffect(() => {
     if (demo) trackEvent('demo_open', { slug: demo.slug })
@@ -90,7 +95,7 @@ export function Component() {
   }, [loadPage])
 
   if (!demo) {
-    if (looked && slug !== '__fallback') return <NotFound />
+    if (looked) return <NotFound />
     return (
       <section className="section">
         <Head><title>Demo</title><meta name="robots" content="noindex" /></Head>

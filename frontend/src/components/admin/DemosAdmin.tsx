@@ -113,7 +113,7 @@ function DemoForm({ token, demo, onDone, onCancel, onExpired }: { token: string;
         <div>
           <label className={label} htmlFor="d-zip">Sayt fayllari (.zip) {demo?.kind === 'files' ? '(almashtirish uchun)' : '*'}</label>
           <input id="d-zip" type="file" accept=".zip,application/zip" className="block w-full text-sm" onChange={(e) => pickZip(e.target.files?.[0])} />
-          <p className="mt-1 text-sm text-slate-500">Oddiy statik sayt (HTML, CSS, JS, rasm, shrift). React/Vite saytni <code>base: './'</code> bilan build qilib, <code>dist</code> papkasini zip qiling. Zip ichida <code>index.html</code> boʻlsin. Eng koʻpi 40 MB.</p>
+          <p className="mt-1 text-sm text-slate-500">Oddiy statik sayt (HTML, CSS, JS, rasm, shrift). React/Vite saytni <code>base: './'</code> bilan build qilib, <code>dist</code> papkasini zip qiling. Zip ichida <code>index.html</code> boʻlsin. Eng koʻpi 40 MB. <strong>Ogohlantirish:</strong> sahifalari <code>BrowserRouter</code> bilan ishlaydigan yoki login/localStorage kerak boʻlgan React ilovalar zip ichida ishlamaydi. Ularni sayti internetda ochiq boʻlsa, «Tayyor havola» orqali qoʻshing.</p>
           {zipBusy && <p className="mt-2 text-sm font-semibold text-slate-500">Zip tekshirilmoqda...</p>}
           {zip && (
             <div className="mt-2 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-800" role="status">

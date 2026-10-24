@@ -1,6 +1,6 @@
 import type { RouteRecord } from 'vite-react-ssg'
 import Layout from './components/layout/Layout'
-import { getDemos, getPosts, getProjects } from './lib/api'
+import { getPosts, getProjects } from './lib/api'
 import { ENABLE_BUSINESS } from './lib/config'
 
 export const routes: RouteRecord[] = [
@@ -31,7 +31,8 @@ export const routes: RouteRecord[] = [
       {
         path: 'demolar/:slug',
         lazy: () => import('./pages/DemoView'),
-        getStaticPaths: async () => (await getDemos()).map((d) => `demolar/${d.slug}`),
+        // Demolar brauzerda yuklanadi; Netlify barcha /demolar/* ni shu oldindan tayyor sahifaga yoʻnaltiradi
+        getStaticPaths: async () => ['demolar/__shell'],
       },
       { path: 'tahlil', lazy: () => import('./pages/Diagnosis') },
       { path: 'aloqa', lazy: () => import('./pages/Contact') },
