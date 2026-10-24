@@ -10,7 +10,7 @@ const kb = (n: number) => (n > 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)} MB
 function DemoForm({ token, demo, onDone, onCancel, onExpired }: { token: string; demo: AdminDemo | null; onDone: (d: AdminDemo) => void; onCancel: () => void; onExpired: () => void }) {
   const [f, setF] = useState({
     title: demo?.title ?? '', description: demo?.description ?? '', category: demo?.category ?? 'sayt',
-    kind: (demo?.kind ?? 'files') as 'url' | 'files', url: demo?.url ?? '', published: demo?.published ?? true, order: String(demo?.order ?? 0),
+    kind: (demo?.kind ?? 'files') as 'url' | 'files', url: demo?.url ?? '', note: demo?.note ?? '', published: demo?.published ?? true, order: String(demo?.order ?? 0),
   })
   const [zip, setZip] = useState<Extracted | null>(null)
   const [zipBusy, setZipBusy] = useState(false)
@@ -45,7 +45,7 @@ function DemoForm({ token, demo, onDone, onCancel, onExpired }: { token: string;
     try {
       onDone(
         await saveDemo(token, demo, {
-          title: f.title.trim(), description: f.description.trim(), category: f.category, kind: f.kind, url: f.url.trim(),
+          title: f.title.trim(), description: f.description.trim(), category: f.category, kind: f.kind, url: f.url.trim(), note: f.note.trim(),
           published: f.published, order: Number(f.order) || 0, coverFile: cover, removeCover: removeCover && !cover, zip,
         }, (done, total) => setProgress([done, total])),
       )
@@ -74,6 +74,11 @@ function DemoForm({ token, demo, onDone, onCancel, onExpired }: { token: string;
       <div>
         <label className={label} htmlFor="d-desc">Qisqa tavsif</label>
         <textarea id="d-desc" rows={3} className="w-full rounded-xl border border-slate-200 px-3 py-2" value={f.description} onChange={(e) => set('description', e.target.value)} />
+      </div>
+      <div>
+        <label className={label} htmlFor="d-note">Kirish maʼlumoti (ixtiyoriy)</label>
+        <textarea id="d-note" rows={2} maxLength={500} placeholder="Login: demo@izdoshlar.uz, Parol: demo1234" className="w-full rounded-xl border border-slate-200 px-3 py-2" value={f.note} onChange={(e) => set('note', e.target.value)} />
+        <p className="mt-1 text-sm text-slate-500">Sayt login talab qilsa, demo hisob maʼlumotini yozing: demo ochilganda hamma koʻradi. Haqiqiy login/parol yozmang, faqat test hisob va namuna maʼlumot bilan.</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
         <div>

@@ -164,12 +164,13 @@ export interface Demo {
   kind: 'url' | 'files'
   url: string
   entry: string
+  note: string
   cover: string
 }
 export const getDemos = () =>
   fetchRows<Row, Demo[]>(
-    `demos?select=slug,title,description,category,kind,url,entry,cover_url&published=eq.true&${ORDER}`,
-    (rows) => rows.map(({ cover_url, ...r }) => ({ ...r, cover: cover_url || '' }) as Demo),
+    `demos?select=slug,title,description,category,kind,url,entry,access_note,cover_url&published=eq.true&${ORDER}`,
+    (rows) => rows.map(({ cover_url, access_note, ...r }) => ({ ...r, note: access_note || '', cover: cover_url || '' }) as Demo),
     () => [],
   )
 export async function getDemo(slug: string) {

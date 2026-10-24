@@ -13,6 +13,7 @@ export interface AdminDemo {
   kind: 'url' | 'files'
   url: string
   entry: string
+  note: string
   cover: string | null
   published: boolean
   order: number
@@ -24,6 +25,7 @@ export interface DemoInput {
   category: string
   kind: 'url' | 'files'
   url: string
+  note: string
   published: boolean
   order: number
   coverFile: File | null
@@ -43,11 +45,11 @@ const MAX_FILES = 300
 const MAX_FILE = 25 * 1024 * 1024
 const MAX_TOTAL = 60 * 1024 * 1024
 
-const COLS = 'id,slug,title,description,category,kind,url,entry,cover_url,published,sort_order'
+const COLS = 'id,slug,title,description,category,kind,url,entry,access_note,cover_url,published,sort_order'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const toDemo = (r: Record<string, any>): AdminDemo => ({
   id: r.id, slug: r.slug, title: r.title, description: r.description, category: r.category, kind: r.kind,
-  url: r.url, entry: r.entry, cover: r.cover_url || null, published: r.published, order: r.sort_order,
+  url: r.url, entry: r.entry, note: r.access_note ?? '', cover: r.cover_url || null, published: r.published, order: r.sort_order,
 })
 
 // ---------------- Zip'ni ochish va tekshirish ----------------
@@ -199,7 +201,7 @@ export async function saveDemo(token: string, existing: AdminDemo | null, input:
 
   const base = {
     title: input.title, description: input.description, category: input.category, kind: input.kind,
-    url: input.kind === 'url' ? input.url : '', published: input.published, sort_order: input.order, cover_url,
+    url: input.kind === 'url' ? input.url : '', access_note: input.note, published: input.published, sort_order: input.order, cover_url,
     ...(input.kind === 'files' && input.zip ? { entry: input.zip.entry } : {}),
   }
   const prefer = { Prefer: 'return=representation' }

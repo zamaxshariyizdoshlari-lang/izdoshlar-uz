@@ -135,6 +135,12 @@ export function Component() {
       <section className="bg-slate-100 py-6">
         <div className="container-page">
           {demo.description && <p className="mx-auto mb-4 max-w-3xl text-center text-ink-700">{demo.description}</p>}
+          {demo.note && (
+            <div className="mx-auto mb-4 max-w-xl rounded-2xl border border-sun-400/60 bg-sun-100 px-5 py-3 text-center">
+              <p className="text-sm font-bold text-ink-900">Demo uchun kirish maʼlumoti</p>
+              <p className="mt-1 whitespace-pre-line font-mono text-sm text-ink-700 select-all">{demo.note}</p>
+            </div>
+          )}
           <div className="mx-auto overflow-hidden rounded-2xl border border-line bg-white shadow-lift transition-all duration-300" style={{ width, maxWidth: '100%' }}>
             {demo.kind === 'url' ? (
               <iframe ref={frame} title={demo.title} src={demo.url} className="block h-[75vh] min-h-[520px] w-full" sandbox="allow-scripts allow-forms allow-popups allow-same-origin" referrerPolicy="no-referrer" loading="lazy" />
