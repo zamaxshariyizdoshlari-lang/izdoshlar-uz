@@ -1,6 +1,7 @@
-import { ExternalLink, Inbox, LayoutDashboard, LogOut, Menu, Package, Settings, X, type LucideIcon } from 'lucide-react'
+import { ExternalLink, Inbox, LayoutDashboard, LogOut, Menu, MonitorPlay, Package, Settings, X, type LucideIcon } from 'lucide-react'
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { Head } from 'vite-react-ssg'
+import { DemosAdmin } from '../components/admin/DemosAdmin'
 import { OrdersAdmin } from '../components/admin/OrdersAdmin'
 import { ProductsAdmin } from '../components/admin/ProductsAdmin'
 import { SettingsPage } from '../components/admin/SettingsPage'
@@ -18,6 +19,7 @@ const NAV: NavItem[] = [
   { id: 'statistika', label: 'Statistika', icon: LayoutDashboard },
   { id: 'buyurtmalar', label: 'Buyurtmalar', icon: Inbox },
   { id: 'mahsulotlar', label: 'Mahsulotlar', icon: Package },
+  { id: 'demolar', label: 'Demolar', icon: MonitorPlay },
   { id: 'sozlamalar', label: 'Sozlamalar', icon: Settings },
 ]
 
@@ -231,6 +233,7 @@ export function Component() {
           {page === 'statistika' && <StatsPage token={token} onExpired={onExpired} />}
           {page === 'buyurtmalar' && <OrdersAdmin token={token} onExpired={onExpired} />}
           {page === 'mahsulotlar' && <ProductsAdmin token={token} onLogout={handleLogout} />}
+          {page === 'demolar' && <DemosAdmin token={token} onExpired={onExpired} />}
           {page === 'sozlamalar' && <SettingsPage token={token} onExpired={onExpired} />}
           {/* "Yana" sahifalar (demolar, kontent) keyingi bosqichda qoʻshiladi */}
           <span hidden>{goTo.length}</span>

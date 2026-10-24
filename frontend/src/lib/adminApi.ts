@@ -202,9 +202,9 @@ const toProduct = (r: Record<string, any>): AdminProduct => ({
   order: r.sort_order,
 })
 
-const mediaPath = (url: string | null) => (url && url.startsWith(PUBLIC_MEDIA) ? url.slice(PUBLIC_MEDIA.length) : null)
+export const mediaPath = (url: string | null) => (url && url.startsWith(PUBLIC_MEDIA) ? url.slice(PUBLIC_MEDIA.length) : null)
 
-async function uploadCover(token: string, file: File): Promise<{ url: string; path: string }> {
+export async function uploadCover(token: string, file: File): Promise<{ url: string; path: string }> {
   const ext = EXT[file.type]
   if (!ext) throw new ApiError(415)
   const path = `products/${crypto.randomUUID()}.${ext}`
@@ -217,7 +217,7 @@ async function uploadCover(token: string, file: File): Promise<{ url: string; pa
   return { url: PUBLIC_MEDIA + path, path }
 }
 
-const removeObject = (token: string, path: string | null) =>
+export const removeObject = (token: string, path: string | null) =>
   path ? raw(`/storage/v1/object/media/${path}`, { method: 'DELETE', token }).catch(() => {}) : Promise.resolve()
 
 export async function fetchProducts(token: string): Promise<AdminProduct[]> {

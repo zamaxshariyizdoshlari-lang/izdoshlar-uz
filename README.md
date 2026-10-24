@@ -52,6 +52,7 @@ Bazaning xavfsizlik qoidalari (anon nimani o'qiy/yoza oladi, admin chegaralari) 
 | Statistika | Tashrif buyuruvchilar, ko'rishlar, buyurtmalar, konversiya, demo ochilishlari (oldingi davr bilan taqqoslash), dinamika grafigi, hozir onlayn, top sahifalar, manbalar, UTM, qurilma, brauzer, OT, davlat, soatlar, harakatlar, buyurtmalar holati/xizmati; 7/30/90 kun, CSV |
 | Buyurtmalar | Filtr, qidiruv, status, ichki izoh, status tarixi, CSV yuklash (Excel formulalaridan himoyalangan) |
 | Mahsulotlar | Qo'shish, tahrirlash, rasm yuklash, yashirish, o'chirish |
+| Demolar | Tayyor saytni .zip (index.html ildizda; Vite uchun `base: './'`) yoki https havola sifatida qo'shish; `/demolar` sahifasida mijozlar telefon/planshet/kompyuter ko'rinishida sinaydi |
 | Sozlamalar | Parolni almashtirish |
 
 **Statistika** cookie'siz va anonim: sayt `track` Edge Function'iga sahifa ko'rishlari va harakatlarni yuboradi; IP saqlanmaydi, "sid" har kuni yangilanadigan qaytarib bo'lmaydigan xesh. Botlar, `/boshqaruv`, "Kuzatma" (DNT) yoqilgan brauzerlar va admin o'z brauzerida hisoblanmaydi. Ma'lumotlar 180 kundan keyin o'chiriladi. Hisob: `public.admin_stats(kunlar)` (faqat admin).

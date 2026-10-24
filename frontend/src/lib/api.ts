@@ -156,6 +156,26 @@ export const getProducts = () =>
     () => [],
   )
 
+export interface Demo {
+  slug: string
+  title: string
+  description: string
+  category: string
+  kind: 'url' | 'files'
+  url: string
+  entry: string
+  cover: string
+}
+export const getDemos = () =>
+  fetchRows<Row, Demo[]>(
+    `demos?select=slug,title,description,category,kind,url,entry,cover_url&published=eq.true&${ORDER}`,
+    (rows) => rows.map(({ cover_url, ...r }) => ({ ...r, cover: cover_url || '' }) as Demo),
+    () => [],
+  )
+export async function getDemo(slug: string) {
+  return (await getDemos()).find((d) => d.slug === slug) ?? null
+}
+
 export async function getPosts(): Promise<Post[]> {
   if (!HAS_BACKEND) return localPosts
   const posts = await fetchRows<Row, ApiPost[] | null>(

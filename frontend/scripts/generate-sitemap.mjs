@@ -26,7 +26,7 @@ async function fromApi(path) {
 }
 
 const business = process.env.VITE_ENABLE_BUSINESS !== '0'
-const pages = ['', '/tahlil', '/maktablar', '/loyihalar', '/xizmatlar', ...(business ? ['/narxlar'] : []), '/mahsulotlar', '/haqimda', '/blog', '/aloqa', '/maxfiylik', '/oferta']
+const pages = ['', '/tahlil', '/demolar', '/maktablar', '/loyihalar', '/xizmatlar', ...(business ? ['/narxlar'] : []), '/mahsulotlar', '/haqimda', '/blog', '/aloqa', '/maxfiylik', '/oferta']
 const lastmod = {}
 
 const projects = (await fromApi('projects?select=slug&published=eq.true')) ?? JSON.parse(readFileSync(join(root, 'src/data/projects.json'), 'utf8'))

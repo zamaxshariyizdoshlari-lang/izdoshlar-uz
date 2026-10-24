@@ -1,6 +1,6 @@
 import type { RouteRecord } from 'vite-react-ssg'
 import Layout from './components/layout/Layout'
-import { getPosts, getProjects } from './lib/api'
+import { getDemos, getPosts, getProjects } from './lib/api'
 import { ENABLE_BUSINESS } from './lib/config'
 
 export const routes: RouteRecord[] = [
@@ -26,6 +26,12 @@ export const routes: RouteRecord[] = [
         path: 'blog/:slug',
         lazy: () => import('./pages/BlogPost'),
         getStaticPaths: async () => (await getPosts()).map((p) => `blog/${p.slug}`),
+      },
+      { path: 'demolar', lazy: () => import('./pages/Demos') },
+      {
+        path: 'demolar/:slug',
+        lazy: () => import('./pages/DemoView'),
+        getStaticPaths: async () => (await getDemos()).map((d) => `demolar/${d.slug}`),
       },
       { path: 'tahlil', lazy: () => import('./pages/Diagnosis') },
       { path: 'aloqa', lazy: () => import('./pages/Contact') },
